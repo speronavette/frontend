@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // src/components/ui/alert.jsx
 import * as React from "react"
 import { cn } from "@/lib/utils"
@@ -25,4 +26,33 @@ const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
 ))
 AlertDescription.displayName = "AlertDescription"
 
+=======
+// src/components/ui/alert.jsx
+import * as React from "react"
+import { cn } from "@/lib/utils"
+
+const Alert = React.forwardRef(({ className, variant = "default", ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "relative w-full rounded-lg border p-4",
+      {
+        "bg-background text-foreground": variant === "default",
+        "border-destructive/50 text-destructive dark:border-destructive": variant === "destructive",
+      },
+      className
+    )}
+    {...props} />
+))
+Alert.displayName = "Alert"
+
+const AlertDescription = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-sm [&_p]:leading-relaxed", className)}
+    {...props} />
+))
+AlertDescription.displayName = "AlertDescription"
+
+>>>>>>> 9d7972c328e4c9a16471781771699d890d61465d
 export { Alert, AlertDescription }

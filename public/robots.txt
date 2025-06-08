@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 User-agent: *
 Allow: /
 
+=======
+User-agent: *
+Allow: /
+
+>>>>>>> 9d7972c328e4c9a16471781771699d890d61465d
 Sitemap: https://www.spero-navette.be/sitemap.xml
