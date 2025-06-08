@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom'; // ✅ CHANGÉ : HashRouter → BrowserRouter
 import App from './App.jsx';
 import './index.css';
 
@@ -84,9 +84,11 @@ window.updatePageTitle = (title) => {
 // Attacher la fonction handleFormSubmit à window pour y accéder depuis les composants
 window.handleFormSubmit = handleFormSubmit;
 
-// Créer l'application React avec HashRouter
+// ✅ CHANGÉ : HashRouter → BrowserRouter
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <HashRouter>
-    <App />
-  </HashRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
