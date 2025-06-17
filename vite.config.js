@@ -3,7 +3,13 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      // OPTIMISATION CRITIQUE: Réduire la taille de React
+      jsxRuntime: 'automatic',
+      jsxImportSource: 'react'
+    })
+  ],
   server: {
     port: 5173,
     host: true,
@@ -21,53 +27,96 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     minify: 'esbuild',
-    target: 'es2015',
+    target: 'es2020', // Plus moderne = plus petit
     assetsDir: 'assets',
     emptyOutDir: true,
     
-    // OPTIMISATION CRITIQUE : Code splitting agressif
+    // OPTIMISATION CRITIQUE: Tree-shaking agressif
     rollupOptions: {
+      treeshake: {
+        preset: 'recommended',
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false
+      },
       output: {
-        // Séparer les vendors des composants
-        manualChunks: {
-          // Chunk pour React et les utilitaires core
-          'react-vendor': ['react', 'react-dom'],
+        // Chunks optimisés pour réduire JavaScript inutilisé
+        manualChunks: (id) => {
+          // React core séparé
+          if (id.includes('react') || id.includes('react-dom')) {
+            return 'react-core';
+          }
           
-          // Chunk pour les utilitaires date et calculs
-          'utils-vendor': ['date-fns'],
+          // Router séparé (chargé uniquement si navigation)
+          if (id.includes('react-router')) {
+            return 'router';
+          }
           
-          // Chunk pour les composants principaux
-          'price-calculator': ['./src/components/PriceCalculator.jsx'],
-          'services': ['./src/pages/Services.jsx'],
-          'contact': ['./src/pages/Contact.jsx']
+          // Date utilities séparées
+          if (id.includes('date-fns')) {
+            return 'date-utils';
+          }
+          
+          // Node modules séparés
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+          
+          // Pages comme chunks séparés
+          if (id.includes('/pages/')) {
+            const page = id.split('/pages/')[1].split('.')[0];
+            return `page-${page}`;
+          }
+          
+          // Composants comme chunks séparés
+          if (id.includes('/components/')) {
+            return 'components';
+          }
         },
         
-        // Noms de fichiers optimisés pour cache
         chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/main-[hash].js',
         assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+      },
+      
+      // OPTIMISATION: Externaliser les gros modules si possible
+      external: (id) => {
+        // Ne pas externaliser car on n'a pas de CDN pour React
+        return false;
       }
     },
     
-    // OPTIMISATION CRITIQUE : Réduction taille bundle
+    // OPTIMISATION CRITIQUE: CSS et JavaScript
     cssCodeSplit: true,
-    sourcemap: false, // Désactiver en prod pour réduire la taille
+    cssMinify: true,
+    sourcemap: false,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 500, // Warning si chunk > 500kb
     
-    // OPTIMISATION : Compression
-    reportCompressedSize: false, // Plus rapide build
-    chunkSizeWarningLimit: 1000
+    // OPTIMISATION: Minification avancée
+    minify: 'esbuild',
+    target: 'es2020'
   },
   
-  // OPTIMISATION CRITIQUE : Dépendances pré-bundlées
+  // OPTIMISATION CRITIQUE: Dépendances optimisées
   optimizeDeps: {
     include: [
       'react',
-      'react-dom',
-      'date-fns'
+      'react-dom/client',
+      'react-router-dom'
     ],
     exclude: [
-      // Exclure les dépendances lourdes non critiques
-    ]
+      // Exclure les modules lourds non critiques
+    ],
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  },
+  
+  // OPTIMISATION: Définir les variables d'environnement
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    __DEV__: false
   },
   
   base: '/'
