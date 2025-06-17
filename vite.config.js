@@ -7,7 +7,6 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
-    // Autoriser votre domaine personnalisé
     allowedHosts: ['www.spero-navette.be', 'spero-navette.be', '.onrender.com']
   },
   preview: {
@@ -23,10 +22,57 @@ export default defineConfig({
     outDir: 'dist',
     minify: 'esbuild',
     target: 'es2015',
-    // Configuration pour production avec domaine personnalisé
     assetsDir: 'assets',
-    emptyOutDir: true
+    emptyOutDir: true,
+    
+    // OPTIMISATION CRITIQUE : Code splitting agressif
+    rollupOptions: {
+      output: {
+        // Séparer les vendors des composants
+        manualChunks: {
+          // Chunk pour React et les utilitaires core
+          'react-vendor': ['react', 'react-dom'],
+          
+          // Chunk pour les utilitaires date et calculs
+          'utils-vendor': ['date-fns'],
+          
+          // Chunk pour chaque page/route majeure
+          'calculator': ['./src/pages/Calculator.jsx'],
+          'services': ['./src/pages/Services.jsx'],
+          'about': ['./src/pages/About.jsx'],
+          'contact': ['./src/pages/Contact.jsx'],
+          
+          // Chunk pour les composants UI lourds si existants
+          'ui-components': ['./src/components/ui/index.js']
+        },
+        
+        // Noms de fichiers optimisés pour cache
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+      }
+    },
+    
+    // OPTIMISATION CRITIQUE : Réduction taille bundle
+    cssCodeSplit: true,
+    sourcemap: false, // Désactiver en prod pour réduire la taille
+    
+    // OPTIMISATION : Compression
+    reportCompressedSize: false, // Plus rapide build
+    chunkSizeWarningLimit: 1000
   },
-  // Configuration de base pour votre domaine
+  
+  // OPTIMISATION CRITIQUE : Dépendances pré-bundlées
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'date-fns'
+    ],
+    exclude: [
+      // Exclure les dépendances lourdes non critiques
+    ]
+  },
+  
   base: '/'
 });
