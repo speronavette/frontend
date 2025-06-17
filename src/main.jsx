@@ -19,7 +19,7 @@ const updateMetaTags = () => {
     metaDescription.setAttribute('name', 'description');
     document.head.appendChild(metaDescription);
   }
-  
+   
   // Keywords
   let metaKeywords = document.querySelector('meta[name="keywords"]');
   if (!metaKeywords) {

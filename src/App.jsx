@@ -24,6 +24,7 @@ const BlogPost = lazy(() => import('./pages/BlogPost'));
 // Styles
 import "./styles/date-range.css";
 
+
 // Fonction pour définir le titre de la page
 if (typeof window !== 'undefined') {
   window.updatePageTitle = (title) => {
