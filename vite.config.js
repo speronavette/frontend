@@ -6,7 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    host: true
+    host: true,
+    // Autoriser votre domaine personnalisé
+    allowedHosts: ['www.spero-navette.be', 'spero-navette.be', '.onrender.com']
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4173
   },
   resolve: {
     alias: {
@@ -16,6 +22,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     minify: 'esbuild',
-    target: 'es2015'
-  }
+    target: 'es2015',
+    // Configuration pour production avec domaine personnalisé
+    assetsDir: 'assets',
+    emptyOutDir: true
+  },
+  // Configuration de base pour votre domaine
+  base: '/'
 });
