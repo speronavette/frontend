@@ -36,14 +36,10 @@ export default defineConfig({
           // Chunk pour les utilitaires date et calculs
           'utils-vendor': ['date-fns'],
           
-          // Chunk pour chaque page/route majeure
-          'calculator': ['./src/pages/Calculator.jsx'],
+          // Chunk pour les composants principaux
+          'price-calculator': ['./src/components/PriceCalculator.jsx'],
           'services': ['./src/pages/Services.jsx'],
-          'about': ['./src/pages/About.jsx'],
-          'contact': ['./src/pages/Contact.jsx'],
-          
-          // Chunk pour les composants UI lourds si existants
-          'ui-components': ['./src/components/ui/index.js']
+          'contact': ['./src/pages/Contact.jsx']
         },
         
         // Noms de fichiers optimisés pour cache
