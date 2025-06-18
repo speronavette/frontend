@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { calculatePrice } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 
-// ✅ SOLUTION QUI MARCHE : Import groupé mais optimisé avec tree-shaking
+// ✅ IMPORTS LUCIDE-REACT SEULEMENT - SUPPRESSION DES ICÔNES MANUELLES
 import { 
   ArrowRight, 
   Clock, 
@@ -17,6 +17,7 @@ import {
   Star 
 } from 'lucide-react';
 
+// ========== DONNÉES STATIQUES ==========
 const airports = [
   { code: 'BRU', nom: 'Aéroport de Bruxelles', pays: 'Belgique' },
   { code: 'CRL', nom: 'Aéroport de Charleroi', pays: 'Belgique' },
@@ -29,6 +30,8 @@ const airports = [
   { code: 'ORY', nom: 'Aéroport de Paris Orly', pays: 'France' },
   { code: 'LUX', nom: 'Aéroport de Luxembourg', pays: 'Luxembourg' }
 ];
+
+const PASSENGER_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 // Données structurées optimisées pour le SEO local
 const structuredData = {
@@ -120,92 +123,157 @@ const navetteFAQData = {
   ]
 };
 
+// OPTIMISATION: CSS inline pour éliminer CLS et améliorer LCP
+const criticalCSS = `
+  .calculator-section {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+  }
+  .calculator-container {
+    width: 100%;
+    max-width: 28rem;
+    background: white;
+    border-radius: 0.5rem;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 2rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .features-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 768px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .testimonials-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+`;
+
 function Home() {
   const navigate = useNavigate();
-  const [passengers, setPassengers] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [commune, setCommune] = useState('');
-  const [destination, setDestination] = useState('');
+  const [formData, setFormData] = useState({
+    passengers: '',
+    postalCode: '',
+    commune: '',
+    destination: ''
+  });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handlePostalCodeChange = (e) => {
+  // OPTIMISATION: Handlers memoized
+  const handlePostalCodeChange = useCallback((e) => {
     const code = e.target.value;
-    setPostalCode(code);
+    const commune = code.length === 4 ? (postalCodesDB[code] || 'Code postal non trouvé') : '';
     
-    if (code.length === 4) {
-      const foundCommune = postalCodesDB[code];
-      setCommune(foundCommune || 'Code postal non trouvé');
-    } else {
-      setCommune('');
+    setFormData(prev => ({
+      ...prev,
+      postalCode: code,
+      commune
+    }));
+    
+    // Clear error si valide
+    if (code.length === 4 && postalCodesDB[code]) {
+      setErrors(prev => ({ ...prev, postalCode: null }));
     }
-  };
+  }, []);
 
-  const validateForm = () => {
+  const handleFieldChange = useCallback((field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: null }));
+    }
+  }, [errors]);
+
+  const validateForm = useCallback(() => {
     const newErrors = {};
     
-    if (!passengers) {
+    if (!formData.passengers) {
       newErrors.passengers = "Veuillez sélectionner le nombre de passagers";
     }
     
-    if (!postalCode || postalCode.length !== 4) {
+    if (!formData.postalCode || formData.postalCode.length !== 4) {
       newErrors.postalCode = "Veuillez entrer un code postal valide";
     }
     
-    if (!destination) {
+    if (!formData.destination) {
       newErrors.destination = "Veuillez sélectionner une destination";
     }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
     
-    const prices = calculatePrice(postalCode, destination, passengers);
-  
-    if (prices.sharedPrice === 0 && prices.privatePrice === 0) {
-      navigate('/result', {
-        state: {
-          passengers,
-          postalCode,
-          commune,
-          destination: {
-            code: destination,
-            nom: airports.find(a => a.code === destination)?.nom
-          },
-          prices,
-          noPriceFound: true
-        }
-      });
-      return;
-    }
-
-    navigate('/result', {
-      state: {
-        passengers,
-        postalCode,
-        commune,
+    setIsSubmitting(true);
+    
+    try {
+      const prices = calculatePrice(formData.postalCode, formData.destination, formData.passengers);
+      
+      const navigationState = {
+        passengers: formData.passengers,
+        postalCode: formData.postalCode,
+        commune: formData.commune,
         destination: {
-          code: destination,
-          nom: airports.find(a => a.code === destination)?.nom
+          code: formData.destination,
+          nom: airports.find(a => a.code === formData.destination)?.nom
         },
-        prices
-      }
-    });
-  };
+        prices,
+        noPriceFound: prices.sharedPrice === 0 && prices.privatePrice === 0
+      };
 
-  const airportsByCountry = airports.reduce((acc, airport) => {
-    if (!acc[airport.pays]) {
-      acc[airport.pays] = [];
+      navigate('/result', { state: navigationState });
+    } catch (error) {
+      console.error('Error calculating price:', error);
+      setErrors({ general: 'Erreur lors du calcul. Veuillez réessayer.' });
+    } finally {
+      setIsSubmitting(false);
     }
-    acc[airport.pays].push(airport);
-    return acc;
-  }, {});
+  }, [formData, validateForm, isSubmitting, navigate]);
+
+  // OPTIMISATION: Options memoized
+  const passengerOptions = useMemo(() => 
+    PASSENGER_OPTIONS.map(num => (
+      <option key={num} value={num}>{num}</option>
+    )), []);
+
+  const getInputClasses = useCallback((fieldName) => 
+    `w-full p-2 border ${errors[fieldName] ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:border-spero focus:ring-1 focus:ring-spero transition-colors`,
+    [errors]);
 
   return (
     <>
@@ -220,115 +288,128 @@ function Home() {
         <script type="application/ld+json">
           {JSON.stringify(navetteFAQData)}
         </script>
+        <style type="text/css">{criticalCSS}</style>
       </SEO>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Calculateur de prix - MAINTENANT EN PREMIER, JUSTE SOUS LE MENU */}
-        <section id="calculator" className="max-w-md mx-auto mb-16 scroll-mt-24">
-          <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl">
-            <div className="p-8">
-              <h2 className="text-2xl font-semibold text-center mb-6">
-                Calculez le prix de votre navette aéroport
-              </h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="passengers" className="block text-center mb-2 font-medium">
-                    Nombre de personnes :
-                  </label>
-                  <select
-                    id="passengers"
-                    value={passengers}
-                    onChange={(e) => setPassengers(e.target.value)}
-                    className={`w-full p-2 border ${errors.passengers ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:border-spero focus:ring-1 focus:ring-spero`}
-                    aria-label="Sélectionnez le nombre de passagers"
-                    required
-                  >
-                    <option value="">Sélectionnez</option>
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                      <option key={num} value={num}>{num}</option>
-                    ))}
-                  </select>
-                  {errors.passengers && (
-                    <p className="mt-1 text-sm text-red-500">{errors.passengers}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="postalCode" className="block text-center mb-2 font-medium">
-                    Code postal de départ :
-                  </label>
-                  <input
-                    id="postalCode"
-                    type="text"
-                    value={postalCode}
-                    onChange={handlePostalCodeChange}
-                    className={`w-full p-2 border ${errors.postalCode ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:border-spero focus:ring-1 focus:ring-spero`}
-                    maxLength="4"
-                    inputMode="numeric"
-                    placeholder="Ex: 6000 pour Charleroi"
-                    aria-label="Entrez votre code postal"
-                    required
-                  />
-                  {commune && (
-                    <p className="mt-1 text-sm text-gray-600 text-center">{commune}</p>
-                  )}
-                  {errors.postalCode && (
-                    <p className="mt-1 text-sm text-red-500">{errors.postalCode}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="destination" className="block text-center mb-2 font-medium">
-                    Aéroport de destination :
-                  </label>
-                  <select
-                    id="destination"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    className={`w-full p-2 border ${errors.destination ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:border-spero focus:ring-1 focus:ring-spero`}
-                    aria-label="Sélectionnez votre aéroport"
-                    required
-                  >
-                    <option value="">Sélectionnez votre aéroport</option>
-                    <optgroup label="Aéroports principaux">
-                      <option value="BRU">Bruxelles-Zaventem (BRU)</option>
-                      <option value="CRL">Charleroi Brussels South (CRL)</option>
-                      <option value="CDG">Paris Charles de Gaulle (CDG)</option>
-                      <option value="CGN">Cologne (CGN)</option>
-                      <option value="DUS">Düsseldorf (DUS)</option>
-                      <option value="AMS">Amsterdam Schiphol (AMS)</option>
-                      <option value="LIL">Lille (LIL)</option>
-                    </optgroup>
-                    <optgroup label="Autres destinations">
-                      <option value="ZYR">Gare de Bruxelles-Midi</option>
-                      <option value="ORY">Paris Orly (ORY)</option>
-                      <option value="LUX">Luxembourg (LUX)</option>
-                    </optgroup>
-                  </select>
-                  {errors.destination && (
-                    <p className="mt-1 text-sm text-red-500">{errors.destination}</p>
-                  )}
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-spero text-white p-3 rounded-md hover:bg-opacity-90 transition-colors shadow-md hover:shadow-lg flex items-center justify-center"
-                  aria-label="Calculer le prix de votre navette aéroport"
+        {/* ========== CALCULATEUR DE PRIX ========== */}
+        <section id="calculator" className="calculator-section scroll-mt-24 mb-16">
+          <div className="calculator-container">
+            <h2 className="text-2xl font-semibold text-center mb-6">
+              Calculez le prix de votre navette aéroport
+            </h2>
+            
+            {errors.general && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-sm text-red-600">{errors.general}</p>
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="passengers" className="block text-center mb-2 font-medium">
+                  Nombre de personnes :
+                </label>
+                <select
+                  id="passengers"
+                  value={formData.passengers}
+                  onChange={(e) => handleFieldChange('passengers', e.target.value)}
+                  className={getInputClasses('passengers')}
+                  aria-label="Sélectionnez le nombre de passagers"
+                  required
                 >
-                  <span className="mr-2">CALCULER LE TARIF</span>
-                  <ArrowRight size={18} />
-                </button>
-              </form>
+                  <option value="">Sélectionnez</option>
+                  {passengerOptions}
+                </select>
+                {errors.passengers && (
+                  <p className="mt-1 text-sm text-red-500">{errors.passengers}</p>
+                )}
+              </div>
 
-              <p className="text-center text-sm text-gray-600 mt-4">
-                Nous desservons tous les aéroports européens sur demande
-              </p>
-            </div>
+              <div>
+                <label htmlFor="postalCode" className="block text-center mb-2 font-medium">
+                  Code postal de départ :
+                </label>
+                <input
+                  id="postalCode"
+                  type="text"
+                  value={formData.postalCode}
+                  onChange={handlePostalCodeChange}
+                  className={getInputClasses('postalCode')}
+                  maxLength="4"
+                  inputMode="numeric"
+                  placeholder="Ex: 6000 pour Charleroi"
+                  aria-label="Entrez votre code postal"
+                  required
+                />
+                {formData.commune && (
+                  <p className="mt-1 text-sm text-gray-600 text-center">{formData.commune}</p>
+                )}
+                {errors.postalCode && (
+                  <p className="mt-1 text-sm text-red-500">{errors.postalCode}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="destination" className="block text-center mb-2 font-medium">
+                  Aéroport de destination :
+                </label>
+                <select
+                  id="destination"
+                  value={formData.destination}
+                  onChange={(e) => handleFieldChange('destination', e.target.value)}
+                  className={getInputClasses('destination')}
+                  aria-label="Sélectionnez votre aéroport"
+                  required
+                >
+                  <option value="">Sélectionnez votre aéroport</option>
+                  <optgroup label="Aéroports principaux">
+                    <option value="BRU">Bruxelles-Zaventem (BRU)</option>
+                    <option value="CRL">Charleroi Brussels South (CRL)</option>
+                    <option value="CDG">Paris Charles de Gaulle (CDG)</option>
+                    <option value="CGN">Cologne (CGN)</option>
+                    <option value="DUS">Düsseldorf (DUS)</option>
+                    <option value="AMS">Amsterdam Schiphol (AMS)</option>
+                    <option value="LIL">Lille (LIL)</option>
+                  </optgroup>
+                  <optgroup label="Autres destinations">
+                    <option value="ZYR">Gare de Bruxelles-Midi</option>
+                    <option value="ORY">Paris Orly (ORY)</option>
+                    <option value="LUX">Luxembourg (LUX)</option>
+                  </optgroup>
+                </select>
+                {errors.destination && (
+                  <p className="mt-1 text-sm text-red-500">{errors.destination}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-spero text-white p-3 rounded-md hover:bg-opacity-90 transition-colors shadow-md hover:shadow-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Calculer le prix de votre navette aéroport"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Calcul en cours...
+                  </span>
+                ) : (
+                  <>
+                    <span className="mr-2">CALCULER LE TARIF</span>
+                    <ArrowRight size={18} />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Nous desservons tous les aéroports européens sur demande
+            </p>
           </div>
         </section>
 
-        {/* Hero Section optimisée */}
+        {/* ========== HERO SECTION ========== */}
         <section className="mb-12">
           <h1 className="text-4xl font-bold text-spero mb-4 text-center">
             Navette Aéroport Charleroi - Bruxelles - Paris
@@ -341,7 +422,7 @@ function Home() {
           </p>
         </section>
 
-        {/* Zones desservies - Section importante pour le SEO local */}
+        {/* ========== ZONES DESSERVIES ========== */}
         <section className="mb-8 bg-gray-50 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold text-center mb-4">
             Votre navette aéroport depuis votre commune
@@ -358,12 +439,12 @@ function Home() {
           </div>
         </section>
 
-        {/* Avantages clés */}
+        {/* ========== AVANTAGES CLÉS ========== */}
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-spero mb-8 text-center">
             Pourquoi choisir Spero Navette pour vos transferts aéroport ?
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="features-grid">
             <div className="bg-white rounded-lg shadow-md p-6 text-center">
               <Clock className="h-12 w-12 text-spero mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Service 24h/7j</h3>
@@ -390,13 +471,13 @@ function Home() {
           </div>
         </section>
 
-        {/* Services de navette par aéroport */}
+        {/* ========== SERVICES PAR AÉROPORT ========== */}
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-spero mb-8 text-center">
             Nos principales liaisons navette aéroport
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-8 mb-10">
+          <div className="services-grid mb-10">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h3 className="text-xl font-semibold mb-4 text-spero">
                 Navette Aéroport de Bruxelles-Zaventem
@@ -495,12 +576,12 @@ function Home() {
           </div>
         </section>
 
-        {/* Témoignages */}
+        {/* ========== TÉMOIGNAGES ========== */}
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-spero mb-8 text-center">
             Nos clients témoignent
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="testimonials-grid">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex text-yellow-400 mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -531,15 +612,31 @@ function Home() {
                   <Star key={i} className="h-5 w-5 fill-current" />
                 ))}
               </div>
-<p className="text-gray-700 mb-4">
+              <p className="text-gray-700 mb-4">
                 "Très contents de notre prise en charge pour un transfert aller/retour sur l'aéroport de Charleroi, d'autant que notre demande est intervenue un peu tard. Les horaires étaient respectés, le trajet sympathique. Nous recommandons et repasserons par SPERO pour de futurs voyages!"
               </p>
               <p className="font-medium">- Sindy D. de Fosses-la-Ville</p>
             </div>
           </div>
+                    <div className="mt-8 text-center">
+            <div className="bg-spero/5 rounded-lg p-6 max-w-2xl mx-auto">
+              <p className="text-gray-700 mb-4">
+                <strong>Note moyenne : 5.0/5</strong> basée sur plus de 40 avis clients vérifiés
+              </p>
+              <a 
+                href="/avis" 
+                className="inline-flex items-center bg-spero text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors font-medium"
+              >
+                <Star className="h-5 w-5 mr-2 fill-current" />
+                Voir tous nos avis clients (40+)
+                <ArrowRight size={18} className="ml-2" />
+              </a>
+            </div>
+          </div>
         </section>
 
-        {/* Autres services - Version minimaliste */}
+
+        {/* ========== AUTRES SERVICES ========== */}
         <section className="mb-16 bg-gray-50 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold text-center mb-4">Autres services de transport</h2>
           <p className="text-center text-gray-700 max-w-2xl mx-auto">
@@ -548,7 +645,7 @@ function Home() {
           </p>
         </section>
 
-        {/* Contact rapide */}
+        {/* ========== CONTACT RAPIDE ========== */}
         <section className="mb-16 text-center">
           <h2 className="text-3xl font-semibold text-spero mb-6">
             Réservez votre navette aéroport maintenant
@@ -572,7 +669,7 @@ function Home() {
           </div>
         </section>
 
-        {/* FAQ rapide optimisée SEO */}
+        {/* ========== FAQ RAPIDE ========== */}
         <section className="mb-16">
           <h2 className="text-3xl font-semibold text-spero mb-8 text-center">
             Questions fréquentes sur nos navettes aéroport
@@ -627,7 +724,7 @@ function Home() {
           </div>
         </section>
 
-        {/* Réseaux sociaux */}
+        {/* ========== RÉSEAUX SOCIAUX ========== */}
         <section className="mb-12 text-center">
           <h2 className="text-2xl font-semibold text-spero mb-4">Suivez-nous</h2>
           <div className="flex justify-center space-x-6">
@@ -657,4 +754,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default memo(Home);
