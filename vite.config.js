@@ -18,7 +18,15 @@ export default defineConfig({
   
   server: {
     port: 5173,
-    host: true
+    host: true,
+    // 🔥 AJOUT : Configuration des domaines autorisés
+    allowedHosts: [
+      'spero-navette.be',
+      'www.spero-navette.be',
+      '.spero-navette.be', // Wildcard pour tous les sous-domaines
+      'localhost',
+      '127.0.0.1'
+    ]
   },
   
   // Variables d'environnement
