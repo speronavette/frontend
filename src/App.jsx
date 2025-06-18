@@ -25,9 +25,6 @@ const Avis = lazy(() => import('./pages/Avis'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 
-// OPTIMISATION: CSS critique inline déjà dans index.html
-import "./styles/date-range.css";
-
 // OPTIMISATION: Page title utility optimisée
 const updatePageTitle = (title) => {
   if (typeof document !== 'undefined') {
