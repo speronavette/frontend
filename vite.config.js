@@ -1,58 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-  plugins: [
-    react({
-      jsxRuntime: 'automatic'
-    })
-  ],
-  
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-  
+  plugins: [react()],
   server: {
     port: 5173,
-    host: true,
-    allowedHosts: [
-      'spero-navette.be',
-      'www.spero-navette.be',
-      '.spero-navette.be',
-      'localhost',
-      '127.0.0.1'
-    ]
+    host: true
   },
-  
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
   },
-  
   build: {
     outDir: 'dist',
-    sourcemap: false,
     minify: 'esbuild',
-    chunkSizeWarningLimit: 500,
-    
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom']
-        }
-      }
-    },
-    
-    cssCodeSplit: true,
-    cssMinify: true,
-    target: 'esnext'
-  },
-  
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
-    exclude: ['@vitejs/plugin-react']
+    target: 'es2015'
   }
-})
+});
