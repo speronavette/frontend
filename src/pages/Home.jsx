@@ -4,6 +4,19 @@ import SEO from '../components/SEO';
 import { calculatePrice } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 
+// ✅ SOLUTION QUI MARCHE : Import groupé mais optimisé avec tree-shaking
+import { 
+  ArrowRight, 
+  Clock, 
+  Users, 
+  MapPin, 
+  CheckCircle, 
+  Phone, 
+  Mail, 
+  Shield, 
+  Star 
+} from 'lucide-react';
+
 // ========== ICÔNES SVG OPTIMISÉES (memoized pour éviter re-renders) ==========
 const ArrowRight = memo(({ size = 18, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
@@ -671,7 +684,7 @@ function Home() {
                   <Star key={i} className="h-5 w-5 fill-current" />
                 ))}
               </div>
-              <p className="text-gray-700 mb-4">
+<p className="text-gray-700 mb-4">
                 "Très contents de notre prise en charge pour un transfert aller/retour sur l'aéroport de Charleroi, d'autant que notre demande est intervenue un peu tard. Les horaires étaient respectés, le trajet sympathique. Nous recommandons et repasserons par SPERO pour de futurs voyages!"
               </p>
               <p className="font-medium">- Sindy D. de Fosses-la-Ville</p>

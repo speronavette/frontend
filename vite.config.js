@@ -5,84 +5,72 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   plugins: [
     react({
-      // OPTIMISATION CRITIQUE: Réduire la taille de React
-      jsxRuntime: 'automatic',
-      jsxImportSource: 'react'
+      // ✅ FIX : Forcer le JSX classique au lieu de l'automatique
+      jsxRuntime: 'classic'
     })
   ],
   server: {
     port: 5173,
     host: true,
-    allowedHosts: ['www.spero-navette.be', 'spero-navette.be', '.onrender.com']
+    allowedHosts: ['www.spero-navette.be', 'spero-navette.be'],
+    proxy: {
+      '/api': {
+        target: 'https://api.spero-navette.be',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    },
+    hmr: {
+      clientPort: 443,
+      host: 'www.spero-navette.be',
+      protocol: 'wss'
+    },
+    cors: true
   },
   preview: {
-    host: '0.0.0.0',
-    port: 4173
+    host: '0.0.0.0'
   },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  define: {
+    'process.env.NODE_ENV': '"production"'
+  },
   build: {
     outDir: 'dist',
-    minify: 'esbuild',
-    target: 'es2020', // Plus moderne = plus petit
-    assetsDir: 'assets',
-    emptyOutDir: true,
-    
-    // OPTIMISATION CRITIQUE: Tree-shaking agressif
+    sourcemap: false,
+    minify: 'terser',
+    chunkSizeWarningLimit: 300,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
+        passes: 3
+      }
+    },
     rollupOptions: {
-      treeshake: {
-        preset: 'recommended',
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        tryCatchDeoptimization: false
-      },
       output: {
-        // Chunks optimisés pour réduire JavaScript inutilisé
-        manualChunks: (id) => {
-          // React core séparé
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-core';
-          }
-          
-          // Router séparé (chargé uniquement si navigation)
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          
-          // Date utilities séparées
-          if (id.includes('date-fns')) {
-            return 'date-utils';
-          }
-          
-          // Node modules séparés
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-          
-          // Pages comme chunks séparés
-          if (id.includes('/pages/')) {
-            const page = id.split('/pages/')[1].split('.')[0];
-            return `page-${page}`;
-          }
-          
-          // Composants comme chunks séparés
-          if (id.includes('/components/')) {
-            return 'components';
-          }
-        },
-        
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/main-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
-      },
-      
-      // OPTIMISATION: Externaliser les gros modules si possible
-      external: (id) => {
-        // Ne pas externaliser car on n'a pas de CDN pour React
-        return false;
+        manualChunks: {
+          'react-core': ['react', 'react-dom'],
+          'router': ['react-router-dom'],
+          'radix-ui': [
+            '@radix-ui/react-alert-dialog',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-label',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-select',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-tooltip'
+          ],
+          'utils': ['class-variance-authority', 'clsx', 'tailwind-merge']
+        }
       }
     },
     
