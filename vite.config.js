@@ -3,9 +3,11 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-  plugins: [react({
-    jsxRuntime: 'classic' // Retour au mode classic pour vos icônes SVG
-  })],
+  plugins: [
+    react({
+      jsxRuntime: 'classic' // Mode classic pour compatibilité maximale
+    })
+  ],
   server: {
     port: 5173,
     host: true
