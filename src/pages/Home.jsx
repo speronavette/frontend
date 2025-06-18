@@ -618,7 +618,23 @@ function Home() {
               <p className="font-medium">- Sindy D. de Fosses-la-Ville</p>
             </div>
           </div>
+                    <div className="mt-8 text-center">
+            <div className="bg-spero/5 rounded-lg p-6 max-w-2xl mx-auto">
+              <p className="text-gray-700 mb-4">
+                <strong>Note moyenne : 5.0/5</strong> basée sur plus de 40 avis clients vérifiés
+              </p>
+              <a 
+                href="/avis" 
+                className="inline-flex items-center bg-spero text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors font-medium"
+              >
+                <Star className="h-5 w-5 mr-2 fill-current" />
+                Voir tous nos avis clients (40+)
+                <ArrowRight size={18} className="ml-2" />
+              </a>
+            </div>
+          </div>
         </section>
+
 
         {/* ========== AUTRES SERVICES ========== */}
         <section className="mb-16 bg-gray-50 p-6 rounded-lg">
