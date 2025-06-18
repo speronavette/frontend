@@ -1,7 +1,7 @@
-// ==========================================
+// 
 // FICHIER : pages/BookingPreAuthConfirmation.jsx
 // À CRÉER dans votre dossier pages/
-// ==========================================
+// 
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
