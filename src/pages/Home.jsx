@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 import { calculatePrice } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 
-// ✅ SOLUTION QUI MARCHE : Import groupé mais optimisé avec tree-shaking
+// ✅ IMPORTS LUCIDE-REACT SEULEMENT - SUPPRESSION DES ICÔNES MANUELLES
 import { 
   ArrowRight, 
   Clock, 
@@ -17,79 +17,7 @@ import {
   Star 
 } from 'lucide-react';
 
-// ========== ICÔNES SVG OPTIMISÉES (memoized pour éviter re-renders) ==========
-const ArrowRight = memo(({ size = 18, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M5 12h14M12 5l7 7-7 7"/>
-  </svg>
-));
-
-const Clock = memo(({ size = 48, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <circle cx="12" cy="12" r="10"/>
-    <polyline points="12,6 12,12 16,14"/>
-  </svg>
-));
-
-const MapPin = memo(({ size = 48, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-    <circle cx="12" cy="10" r="3"/>
-  </svg>
-));
-
-const Shield = memo(({ size = 48, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-  </svg>
-));
-
-const Users = memo(({ size = 48, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-    <circle cx="9" cy="7" r="4"/>
-    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-  </svg>
-));
-
-const CheckCircle = memo(({ size = 20, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-    <polyline points="22,4 12,14.01 9,11.01"/>
-  </svg>
-));
-
-const Phone = memo(({ size = 18, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-  </svg>
-));
-
-const Mail = memo(({ size = 18, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-    <polyline points="22,6 12,13 2,6"/>
-  </svg>
-));
-
-const Star = memo(({ size = 20, className = "" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" className={className}>
-    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-  </svg>
-));
-
-// OPTIMISATION: Définir les noms des composants pour React DevTools
-ArrowRight.displayName = 'ArrowRight';
-Clock.displayName = 'Clock';
-MapPin.displayName = 'MapPin';
-Shield.displayName = 'Shield';
-Users.displayName = 'Users';
-CheckCircle.displayName = 'CheckCircle';
-Phone.displayName = 'Phone';
-Mail.displayName = 'Mail';
-Star.displayName = 'Star';
-
-// ========== DONNÉES STATIQUES (memoized pour éviter re-création) ==========
+// ========== DONNÉES STATIQUES ==========
 const airports = [
   { code: 'BRU', nom: 'Aéroport de Bruxelles', pays: 'Belgique' },
   { code: 'CRL', nom: 'Aéroport de Charleroi', pays: 'Belgique' },
@@ -195,7 +123,7 @@ const navetteFAQData = {
   ]
 };
 
-// OPTIMISATION CRITIQUE: CSS inline pour éliminer CLS et améliorer LCP
+// OPTIMISATION: CSS inline pour éliminer CLS et améliorer LCP
 const criticalCSS = `
   .calculator-section {
     min-height: 500px;
@@ -364,7 +292,7 @@ function Home() {
       </SEO>
 
       <div className="container mx-auto px-4 py-8">
-        {/* ========== CALCULATEUR DE PRIX (votre outil central) ========== */}
+        {/* ========== CALCULATEUR DE PRIX ========== */}
         <section id="calculator" className="calculator-section scroll-mt-24 mb-16">
           <div className="calculator-container">
             <h2 className="text-2xl font-semibold text-center mb-6">
@@ -684,7 +612,7 @@ function Home() {
                   <Star key={i} className="h-5 w-5 fill-current" />
                 ))}
               </div>
-<p className="text-gray-700 mb-4">
+              <p className="text-gray-700 mb-4">
                 "Très contents de notre prise en charge pour un transfert aller/retour sur l'aéroport de Charleroi, d'autant que notre demande est intervenue un peu tard. Les horaires étaient respectés, le trajet sympathique. Nous recommandons et repasserons par SPERO pour de futurs voyages!"
               </p>
               <p className="font-medium">- Sindy D. de Fosses-la-Ville</p>
