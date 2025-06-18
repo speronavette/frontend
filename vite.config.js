@@ -1,4 +1,5 @@
 
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -8,16 +9,20 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 
+
 export default defineConfig({
   plugins: [
     react({
+
       jsxRuntime: 'classic' // Performance optimisée - évite auto-imports React
+
     })
   ],
   
   // Configuration des alias de chemins
   resolve: {
     alias: {
+
 
       "@": path.resolve(__dirname, "./src"),
     },
@@ -35,18 +40,22 @@ export default defineConfig({
   // Variables d'environnement
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+
   },
   
   build: {
     outDir: 'dist',
+
     sourcemap: false, // Pas de sourcemaps en prod
     minify: 'esbuild', // esbuild plus rapide que terser
     chunkSizeWarningLimit: 500, // Warning si chunk > 500kb
+
     
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
+
           router: ['react-router-dom']
         }
       }
@@ -77,38 +86,29 @@ export default defineConfig({
 })
 
     // OPTIMISATION CRITIQUE: CSS et JavaScript
+
     cssCodeSplit: true,
-    cssMinify: true,
-    sourcemap: false,
-    reportCompressedSize: false,
-    chunkSizeWarningLimit: 500, // Warning si chunk > 500kb
+    cssMinify: 'esbuild',
     
-    // OPTIMISATION: Minification avancée
-    minify: 'esbuild',
-    target: 'es2020'
+    // Target moderne pour bundle plus petit
+    target: 'esnext'
   },
   
-  // OPTIMISATION CRITIQUE: Dépendances optimisées
+  // Optimisations de dépendances
   optimizeDeps: {
     include: [
-      'react',
-      'react-dom/client',
-      'react-router-dom'
+      'react', 
+      'react-dom', 
+      'react-router-dom',
+      'lucide-react',
+      'clsx',
+      'tailwind-merge'
     ],
-    exclude: [
-      // Exclure les modules lourds non critiques
-    ],
-    esbuildOptions: {
-      target: 'es2020'
-    }
+    exclude: ['@vitejs/plugin-react']
   },
-  
-  // OPTIMISATION: Définir les variables d'environnement
-  define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
-    __DEV__: false
-  },
+
   
   base: '/'
 });
+
 
