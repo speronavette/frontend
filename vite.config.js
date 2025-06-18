@@ -8,6 +8,7 @@ export default defineConfig({
     react({
       // Garder le fast refresh mais sans options problématiques
       fastRefresh: true
+
     })
   ],
   server: {

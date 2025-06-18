@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { calculatePrice } from '../data/prices';
