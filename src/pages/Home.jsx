@@ -93,7 +93,6 @@ Mail.displayName = 'Mail';
 Star.displayName = 'Star';
 
 // === DONNÉES STATIQUES (memoized pour éviter re-création) ===
-
 const airports = [
   { code: 'BRU', nom: 'Aéroport de Bruxelles', pays: 'Belgique' },
   { code: 'CRL', nom: 'Aéroport de Charleroi', pays: 'Belgique' },
@@ -373,9 +372,11 @@ function Home() {
 
       <div className="container mx-auto px-4 py-8">
 
+
         {/* === CALCULATEUR DE PRIX === */}
 
         {/* === CALCULATEUR DE PRIX (votre outil central) === */}
+
 
         <section id="calculator" className="calculator-section scroll-mt-24 mb-16">
           <div className="calculator-container">
@@ -718,7 +719,6 @@ function Home() {
             </div>
           </div>
         </section>
-
 
 
 
