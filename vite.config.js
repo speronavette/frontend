@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [
@@ -33,7 +33,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   define: {
@@ -72,6 +72,40 @@ export default defineConfig({
           'utils': ['class-variance-authority', 'clsx', 'tailwind-merge']
         }
       }
+    },
+    
+    // OPTIMISATION CRITIQUE: CSS et JavaScript
+    cssCodeSplit: true,
+    cssMinify: true,
+    sourcemap: false,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 500, // Warning si chunk > 500kb
+    
+    // OPTIMISATION: Minification avancée
+    minify: 'esbuild',
+    target: 'es2020'
+  },
+  
+  // OPTIMISATION CRITIQUE: Dépendances optimisées
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom/client',
+      'react-router-dom'
+    ],
+    exclude: [
+      // Exclure les modules lourds non critiques
+    ],
+    esbuildOptions: {
+      target: 'es2020'
     }
-  }
+  },
+  
+  // OPTIMISATION: Définir les variables d'environnement
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    __DEV__: false
+  },
+  
+  base: '/'
 });

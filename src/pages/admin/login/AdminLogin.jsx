@@ -118,7 +118,7 @@ function AdminLogin() {
            Identifiants de développement :
          </p>
          <p className="text-gray-500">
-           Email: admin@spero-navette.be
+           Email: spero.navette@gmail.com
          </p>
          <p className="text-gray-500">
            Mot de passe: admin123
