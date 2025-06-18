@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: spero-navette-frontend
+    env: static
+    staticPublishPath: ./dist
+    buildCommand: npm run build
+    
+    # ⚠️ CRUCIAL : Redirige toutes les URLs vers index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

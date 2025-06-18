@@ -1,6 +1,12 @@
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
+
 
 export default defineConfig({
   plugins: [
@@ -12,8 +18,13 @@ export default defineConfig({
   // Configuration des alias de chemins
   resolve: {
     alias: {
+
       "@": path.resolve(__dirname, "./src"),
     },
+
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+
   },
   
   server: {
@@ -41,6 +52,7 @@ export default defineConfig({
       }
     },
     
+
     // Optimisations CSS
     cssCodeSplit: true,
     cssMinify: true,
@@ -63,3 +75,40 @@ export default defineConfig({
     exclude: ['@vitejs/plugin-react']
   }
 })
+
+    // OPTIMISATION CRITIQUE: CSS et JavaScript
+    cssCodeSplit: true,
+    cssMinify: true,
+    sourcemap: false,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 500, // Warning si chunk > 500kb
+    
+    // OPTIMISATION: Minification avancée
+    minify: 'esbuild',
+    target: 'es2020'
+  },
+  
+  // OPTIMISATION CRITIQUE: Dépendances optimisées
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom/client',
+      'react-router-dom'
+    ],
+    exclude: [
+      // Exclure les modules lourds non critiques
+    ],
+    esbuildOptions: {
+      target: 'es2020'
+    }
+  },
+  
+  // OPTIMISATION: Définir les variables d'environnement
+  define: {
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    __DEV__: false
+  },
+  
+  base: '/'
+});
+
