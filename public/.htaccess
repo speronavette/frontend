@@ -50,15 +50,36 @@
     Header always set X-Frame-Options "SAMEORIGIN"
 </IfModule>
 
-# REDIRECTIONS POUR SPA (Single Page Application)
-# Nécessaire pour React Router
+# REDIRECTIONS POUR SPA (Single Page Application) - VERSION CORRIGÉE
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
     
-    # Rediriger toutes les routes vers index.html sauf les fichiers existants
-    RewriteRule ^index\.html$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
+    # Permettre l'accès aux fichiers statiques
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Rediriger les autres requêtes vers index.html
+    RewriteRule ^ index.html [L]
 </IfModule>
+
+# PERMISSIONS ET SÉCURITÉ
+Options -Indexes
+DirectoryIndex index.html
+
+# Autoriser l'accès aux fichiers nécessaires
+<Files "index.html">
+    Require all granted
+</Files>
+
+<Files "*.js">
+    Require all granted
+</Files>
+
+<Files "*.css">
+    Require all granted
+</Files>
+
+<Files "*.json">
+    Require all granted
+</Files>
