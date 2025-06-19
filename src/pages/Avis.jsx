@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, User, Calendar, ExternalLink, Filter } from 'lucide-react';
+import { Star, User, Calendar, ExternalLink, Filter } from '../components/Icons';
 
 const StarRating = ({ rating, size = "w-5 h-5" }) => {
   return (
@@ -23,7 +23,11 @@ const AvisCard = ({ avis }) => {
         <div className="flex items-start justify-between mb-2">
           <h3 className="font-semibold text-gray-800 text-lg">{avis.title}</h3>
           <div className="flex items-center text-green-600 text-sm">
-            <span className="bg-green-100 px-2 py-1 rounded text-xs">Google</span>
+            <span className={`px-2 py-1 rounded text-xs ${
+              avis.platform === 'Facebook' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'
+            }`}>
+              {avis.platform}
+            </span>
           </div>
         </div>
         <div className="flex items-center text-sm text-gray-600">
@@ -33,7 +37,7 @@ const AvisCard = ({ avis }) => {
           <span className="font-medium">{avis.author}</span>
           <Calendar className="h-4 w-4 ml-3 mr-1" />
           <span>{avis.date}</span>
-          <ExternalLink className="h-3 w-3 ml-2 text-blue-500" title="Avis Google My Business" />
+          <ExternalLink className="h-3 w-3 ml-2 text-blue-500" title={`Avis ${avis.platform}`} />
         </div>
       </div>
       
@@ -52,287 +56,457 @@ const Avis = () => {
     sortBy: 'recent' // 'recent', 'oldest'
   });
 
-  // Vos avis Google My Business avec titres et signatures
+  // Tous les avis classés par ordre chronologique (plus récents en premier)
   const avisClients = [
     {
       id: 1,
-      title: "Service professionnel et confortable",
-      author: "Client récent",
-      date: "il y a une semaine",
-      comment: "J'ai utilisé ce service de navette pour mes dernières vacances et je suis vraiment ravi. Le chauffeur était ponctuel, très professionnel et sympathique. Le véhicule était propre et confortable, ce qui a rendu le trajet très agréable."
+      title: "Ponctualité, gentillesse, professionnalisme",
+      author: "Jacqueline G.",
+      date: "3 juin 2025",
+      dateSort: "2025-06-03",
+      platform: "Facebook",
+      comment: "Nous avons fait appel à Spero navette pour nos vacances en mai. Ponctualité, gentillesse, professionnalisme... un seul mot : Parfait. Nous referons appel à vous au plus vite. Bravo et merci"
     },
     {
       id: 2,
-      title: "Informations claires et conduite prudente",
-      author: "Voyageur satisfait",
-      date: "il y a une semaine",
-      comment: "Je suis entièrement satisfait du service proposé et Spero navette est à recommander. Rien à reprocher, les informations tant pour l'aller que pour le retour sont claires et précises et le ou les chauffeurs sont à l'heure. La conduite est douce et prudente, merci à eux."
+      title: "Service de navette vraiment ravi",
+      author: "Pascal G.",
+      date: "26 mai 2025",
+      dateSort: "2025-05-26",
+      platform: "Facebook",
+      comment: "J'ai utilisé ce service de navette pour mes dernières vacances et je suis vraiment ravi. Le chauffeur était ponctuel, très professionnel et sympathique. Le véhicule était propre et confortable, ce qui a rendu le trajet très agréable. En plus, le prix était vraiment correct pour la qualité du service proposé, ce qui est rare de nos jours ! Je recommande sans hésiter ce service à toute personne cherchant une solution fiable, pratique et... En voir plus"
     },
     {
       id: 3,
-      title: "Première expérience réussie",
-      author: "Nouveau client",
-      date: "il y a un mois",
-      comment: "Première expérience et nous avons été très satisfait. Départ à l'heure et il nous attendait à la sortie de l'aéroport. Que demander de mieux! Merci"
+      title: "Service impeccable jusqu'à chez moi",
+      author: "Client habituel",
+      date: "il y a 19 heures",
+      dateSort: "2025-06-18",
+      platform: "Google",
+      comment: "Service impeccable ! Chauffeur ponctuel, courtois et conduite très agréable. Trajet aéroport de Bruxelles jusqu'à chez moi sans stress. Je recommande à 100 %"
     },
     {
       id: 4,
-      title: "Transfert Charleroi impeccable",
-      author: "Famille en voyage",
-      date: "il y a 3 semaines",
-      comment: "Très contents de notre prise en charge pour un transfert aller/retour sur l'aéroport de Charleroi, d'autant que notre demande est intervenue un peu tard. Les horaires étaient respectés, le trajet sympathique. Nous recommandons et repasserons par SPERO pour de futurs voyages!"
+      title: "Comme à l'habitude un sans faute",
+      author: "Client fidèle",
+      date: "il y a 19 heures",
+      dateSort: "2025-06-18",
+      platform: "Google",
+      comment: "Comme à l'habitude un sans faute à l'aller comme à l'retour. Ponctualité, efficacité, respect et prudence et jovialité des chauffeurs. Merci à Monsieur Sperolini pour nous fournir une équipe efficace à toute heure en en toute occasion. Je recommande les Navettes Spéro, les yeux fermés et d'ailleurs on sera encore client pour le prochain voyage en septembre 😊 pour mon part."
     },
     {
       id: 5,
-      title: "Équipe au top",
-      author: "Client fidèle",
-      date: "il y a une semaine",
-      comment: "Super équipe très bon service ponctuel plaisant à l'heure continuer nous seront encore clients"
+      title: "Service impeccable à l'aller comme au retour",
+      author: "Véronique D.",
+      date: "il y a 2 jours",
+      dateSort: "2025-06-17",
+      platform: "Google",
+      comment: "Service impeccable à l'aller comme au retour! Aller retour sans souci, c'est notre spécialité ! À bientôt pour un nouveau voyage tout confort 😊"
     },
     {
       id: 6,
-      title: "Ponctualité et amabilité",
-      author: "Voyageur régulier",
-      date: "il y a 5 jours",
-      comment: "Grande qualité de service : ponctualité, amabilité et serviabilité. À recommander."
+      title: "Chauffeurs ponctuels et très professionnels",
+      author: "Morgane M.",
+      date: "il y a 3 jours",
+      dateSort: "2025-06-16",
+      platform: "Google",
+      comment: "Chauffeurs ponctuels et très professionnels. Je vous recommande sans hésitation."
     },
     {
       id: 7,
-      title: "Navette de confiance trouvée",
-      author: "Couple en vacances",
-      date: "il y a 4 semaines",
-      comment: "Vous recherchez une navette de confiance ?? Alors n'hésitez plus... Nous avons réservé chez spero navette en précisant qu'on décollait de Bruxelles."
+      title: "Personnel sympathique et très ponctuel",
+      author: "Anne B.",
+      date: "il y a 3 jours",
+      dateSort: "2025-06-16",
+      platform: "Google",
+      comment: "Un personnel sympathique et très ponctuel. Avec accompagnement et aide pour les bagages jusqu'à la porte d'entrée de l'aéroport et idem au retour!! Et cerise sur le gâteau, des véhicules propres, bien entretenus. Seul point négatif : rien ! Je recommande à 100% pour voyager l'esprit serein!"
     },
     {
       id: 8,
-      title: "Service irréprochable",
-      author: "Marie D.",
-      date: "il y a 3 semaines",
-      comment: "Très bonne prise en charge, ponctualité, serviabilité, gentillesse. A recommander."
+      title: "Super expérience très rassurant",
+      author: "Fabio F.",
+      date: "il y a 3 jours",
+      dateSort: "2025-06-16",
+      platform: "Google",
+      comment: "Super expérience ! Très rassurant pour un premier voyage avec vous . Le chauffeur au retour était d'une sympathie inégalée ! Merci. Je recommande ++"
     },
     {
       id: 9,
-      title: "Chauffeur sympathique",
-      author: "Mme C.",
-      date: "il y a un mois",
-      comment: "Chauffeur ponctuel, aidant, sympa... Navette confortable. Juste un petit désagrément : le prix"
+      title: "Service au top réservé par l'agence de voyage",
+      author: "Olivier B.",
+      date: "il y a 5 jours",
+      dateSort: "2025-06-14",
+      platform: "Google",
+      comment: "Un service au top, réservé par l'agence de voyage, nous nous sommes rendu compte d'une erreur d'horaire en sortant de l'aéroport. Après un échange de message tout à été réglé et nous avons une navette retour à la bonne heure... 👍"
     },
     {
       id: 10,
-      title: "Service ponctuel et poli",
-      author: "Mme M.",
-      date: "il y a un mois",
-      comment: "Chauffeurs à l'heure, poli, aimable mais peu attentif aux bagages (une des valise abimée au retour, réparable, heureusement)"
-    },
-    {
-      id: 11,
-      title: "Client habituel satisfait",
-      author: "Voyageur régulier",
-      date: "il y a un mois",
-      comment: "Transport agréable comme d'habitude. Ponctualité, amabilité étaient au rendez-vous"
-    },
-    {
-      id: 12,
       title: "Expérience au top",
       author: "Thomas L.",
       date: "il y a 6 jours",
+      dateSort: "2025-06-13",
+      platform: "Google",
       comment: "Expérience au top 👍 chauffeur agréable et navette à l'heure 👌"
     },
     {
-      id: 13,
+      id: 11,
       title: "Navette parfaite",
       author: "Pierre M.",
       date: "il y a 6 jours",
+      dateSort: "2025-06-13",
+      platform: "Google",
       comment: "Parfait, navette au top. Chauffeur agréable, ponctuel et camionnette confortable. Rien à dire ;))"
     },
     {
-      id: 14,
-      title: "Service au top",
-      author: "Client satisfait",
-      date: "il y a un mois",
-      comment: "Ponctualité, service au top. Merci pour vos bons soins."
-    },
-    {
-      id: 15,
-      title: "Tout s'est bien passé",
-      author: "Sophie R.",
-      date: "il y a une semaine",
-      comment: "Tout s'est très bien passé et nous étions rentrés en avance et navette là"
-    },
-    {
-      id: 16,
-      title: "Transfert parfait",
-      author: "Jean-Luc P.",
-      date: "il y a un mois",
-      comment: "Transfert aéroport parfait, le chauffeur était à l'heure que ce soit à l'aller et au retour. A recommander"
-    },
-    {
-      id: 17,
+      id: 12,
       title: "Transport parfait aller-retour",
       author: "Michel D.",
       date: "il y a 6 jours",
+      dateSort: "2025-06-13",
+      platform: "Google",
       comment: "Bonjour, transport parfait aller et retour, ponctuels. Chauffeurs polis et très sympathiques. très bon, je recommande"
     },
     {
+      id: 13,
+      title: "Ponctualité et amabilité",
+      author: "Voyageur régulier",
+      date: "il y a 5 jours",
+      dateSort: "2025-06-14",
+      platform: "Google",
+      comment: "Grande qualité de service : ponctualité, amabilité et serviabilité. À recommander."
+    },
+    {
+      id: 14,
+      title: "Service professionnel et confortable",
+      author: "Client récent",
+      date: "il y a une semaine",
+      dateSort: "2025-06-12",
+      platform: "Google",
+      comment: "J'ai utilisé ce service de navette pour mes dernières vacances et je suis vraiment ravi. Le chauffeur était ponctuel, très professionnel et sympathique. Le véhicule était propre et confortable, ce qui a rendu le trajet très agréable."
+    },
+    {
+      id: 15,
+      title: "Informations claires et conduite prudente",
+      author: "Voyageur satisfait",
+      date: "il y a une semaine",
+      dateSort: "2025-06-12",
+      platform: "Google",
+      comment: "Je suis entièrement satisfait du service proposé et Spero navette est à recommander. Rien à reprocher, les informations tant pour l'aller que pour le retour sont claires et précises et le ou les chauffeurs sont à l'heure. La conduite est douce et prudente, merci à eux."
+    },
+    {
+      id: 16,
+      title: "Équipe au top",
+      author: "Client fidèle",
+      date: "il y a une semaine",
+      dateSort: "2025-06-12",
+      platform: "Google",
+      comment: "Super équipe très bon service ponctuel plaisant à l'heure continuer nous seront encore clients"
+    },
+    {
+      id: 17,
+      title: "Tout s'est bien passé",
+      author: "Sophie R.",
+      date: "il y a une semaine",
+      dateSort: "2025-06-12",
+      platform: "Google",
+      comment: "Tout s'est très bien passé et nous étions rentrés en avance et navette là"
+    },
+    {
       id: 18,
-      title: "Bon service et suivi",
-      author: "Catherine L.",
-      date: "il y a 3 semaines",
-      comment: "Très bon service et suivi. Reçois toujours confirmation"
-    },
-    {
-      id: 19,
-      title: "Contact agréable",
-      author: "François B.",
-      date: "il y a un mois",
-      comment: "Prise de contact très agréable - suivi rigoureux - Ponctualité 👍"
-    },
-    {
-      id: 20,
-      title: "Chauffeurs sympathiques",
-      author: "Mme B.",
-      date: "il y a 2 semaines",
-      comment: "Très sérieux. Chauffeurs sympathiques et ponctuels. A recommander."
-    },
-    {
-      id: 21,
       title: "Cliente fidèle satisfaite",
       author: "Nathalie V.",
       date: "il y a une semaine",
+      dateSort: "2025-06-12",
+      platform: "Google",
       comment: "Très satisfaite de la prise en charge de la navette, ça fait déjà quatre fois que nous la prenons aller-retour Bruxelles sans prise de tête, je recommande"
+    },
+    {
+      id: 19,
+      title: "Chauffeurs sympathiques",
+      author: "Mme B.",
+      date: "il y a 2 semaines",
+      dateSort: "2025-06-05",
+      platform: "Google",
+      comment: "Très sérieux. Chauffeurs sympathiques et ponctuels. A recommander."
+    },
+    {
+      id: 20,
+      title: "Bon service et suivi",
+      author: "Catherine L.",
+      date: "il y a 3 semaines",
+      dateSort: "2025-05-29",
+      platform: "Google",
+      comment: "Très bon service et suivi. Reçois toujours confirmation"
+    },
+    {
+      id: 21,
+      title: "Transfert Charleroi impeccable",
+      author: "Famille en voyage",
+      date: "il y a 3 semaines",
+      dateSort: "2025-05-29",
+      platform: "Google",
+      comment: "Très contents de notre prise en charge pour un transfert aller/retour sur l'aéroport de Charleroi, d'autant que notre demande est intervenue un peu tard. Les horaires étaient respectés, le trajet sympathique. Nous recommandons et repasserons par SPERO pour de futurs voyages!"
     },
     {
       id: 22,
       title: "Service irréprochable",
-      author: "David T.",
-      date: "il y a un mois",
-      comment: "Ponctuel, aimables, serviable, service au top merci"
+      author: "Marie D.",
+      date: "il y a 3 semaines",
+      dateSort: "2025-05-29",
+      platform: "Google",
+      comment: "Très bonne prise en charge, ponctualité, serviabilité, gentillesse. A recommander."
     },
     {
       id: 23,
-      title: "Service sûr et sérieux",
-      author: "Claire M.",
-      date: "il y a un mois",
-      comment: "Spero navette est un service de transport sûr et sérieux. Je recommande!"
+      title: "Navette de confiance trouvée",
+      author: "Couple en vacances",
+      date: "il y a 4 semaines",
+      dateSort: "2025-05-22",
+      platform: "Google",
+      comment: "Vous recherchez une navette de confiance ?? Alors n'hésitez plus... Nous avons réservé chez spero navette en précisant qu'on décollait de Bruxelles."
     },
     {
       id: 24,
-      title: "Service parfait",
-      author: "Laurent G.",
-      date: "il y a 9 mois",
-      comment: "Service parfait, chauffeurs à l'heure à l'aller comme au retour et très sympa. Première expérience très positive, je recommande à 100%"
+      title: "Première expérience réussie",
+      author: "Nouveau client",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Première expérience et nous avons été très satisfait. Départ à l'heure et il nous attendait à la sortie de l'aéroport. Que demander de mieux! Merci"
     },
     {
       id: 25,
-      title: "Partenaire de confiance",
-      author: "Philippe R.",
-      date: "il y a un an",
-      comment: "C'est toujours un plaisir de faire appel à leur service de navette. Ponctuel, sympathique et tarifs tout à fait compétitifs. Un vrai partenaire pour nos futurs déplacements vers l'aéroport."
+      title: "Chauffeur sympathique",
+      author: "Mme C.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Chauffeur ponctuel, aidant, sympa... Navette confortable. Juste un petit désagrément : le prix"
     },
     {
       id: 26,
-      title: "Service honnête",
-      author: "M. Tubello",
-      date: "il y a 8 mois",
-      comment: "Super service et à l'heure. Très honnête compte tenu de la grève à l'aéroport de Charleroi: Mr Sperolini a accepté de nous prendre en charge 2 jours plus tard sans frais supplémentaires. Un grand merci !!"
+      title: "Service ponctuel et poli",
+      author: "Mme M.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Chauffeurs à l'heure, poli, aimable mais peu attentif aux bagages (une des valise abimée au retour, réparable, heureusement)"
     },
     {
       id: 27,
-      title: "Chauffeur attentif",
-      author: "Anne S.",
-      date: "il y a un an",
-      comment: "Un service de grande qualité. Après un voyage fatiguant, il est bon de pouvoir compter sur une personne attentive et prudente pour nous ramener à la maison, de plus de nuit."
+      title: "Client habituel satisfait",
+      author: "Voyageur régulier",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Transport agréable comme d'habitude. Ponctualité, amabilité étaient au rendez-vous"
     },
     {
       id: 28,
-      title: "Première expérience parfaite",
-      author: "Julie K.",
-      date: "il y a un an",
-      comment: "Première expérience de ce genre de service pour moi, mais très satisfaite du service reçu. Suivi nikel, le chauffeur à l'aller, nous prévient 10 minutes avant d'arriver au domicile et au retour nous indique l'heure de son arrivée."
+      title: "Service au top",
+      author: "Client satisfait",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Ponctualité, service au top. Merci pour vos bons soins."
     },
     {
       id: 29,
-      title: "Service extraordinaire",
-      author: "Amélie H.",
-      date: "il y a 2 ans",
-      comment: "MAGNIFIQUE Expérience avec Spero Navette. Nous les avons contacté suite aux recommandations de notre agence de voyage mais sans les connaître et quelle belle surprise! Tellement ravis de leur service. Leur ponctualité, leur gentillesse."
+      title: "Transfert parfait",
+      author: "Jean-Luc P.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Transfert aéroport parfait, le chauffeur était à l'heure que ce soit à l'aller et au retour. A recommander"
     },
     {
       id: 30,
-      title: "Excellent service",
-      author: "Grégoire M.",
-      date: "il y a un an",
-      comment: "Excellent service, amabilité, respect, serviabilité, ponctualité. A recommander, ce que j'ai déjà fait."
+      title: "Service irréprochable",
+      author: "David T.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Ponctuel, aimables, serviable, service au top merci"
     },
     {
       id: 31,
-      title: "Très pro et sympa",
-      author: "Greg",
-      date: "il y a 6 mois",
-      comment: "Très pro et sympa !! et à l'heure ! :-)"
+      title: "Service sûr et sérieux",
+      author: "Claire M.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Spero navette est un service de transport sûr et sérieux. Je recommande!"
     },
     {
       id: 32,
-      title: "Manu particulièrement agréable",
-      author: "Client enchanté",
-      date: "il y a 2 ans",
-      comment: "Je suis enchanté de la navette Spero, ponctualité et sérieux. Manu est particulièrement agréable et sympathique. Il est attentionné et animé d'un esprit spécifiquement orienté vers le meilleur service au client. A recommander sans modération."
+      title: "Contact agréable",
+      author: "François B.",
+      date: "il y a un mois",
+      dateSort: "2025-05-19",
+      platform: "Google",
+      comment: "Prise de contact très agréable - suivi rigoureux - Ponctualité 👍"
     },
     {
       id: 33,
-      title: "Service depuis des années",
-      author: "Famille fidèle",
-      date: "il y a un an",
-      comment: "Service navette que nous prenons depuis des années. Ponctuel et toujours avec le sourire 🙂 nous en sommes très contents ! Nous recommandons sans hésiter !"
+      title: "Véhicule de confort",
+      author: "Thomas B.",
+      date: "12 juillet 2024",
+      dateSort: "2024-07-12",
+      platform: "Facebook",
+      comment: "Véhicule de confort. Chauffeur d'une gentillesse ponctuelle sur l'heure d'arrivée ou de départ, je recommande vraiment."
     },
     {
       id: 34,
-      title: "Excellent rapport qualité-prix",
-      author: "Caroline D.",
-      date: "il y a un an",
-      comment: "A recommander ! Accueil, professionnalisme, excellent rapport qualité/prix !! Super !!"
+      title: "Très pro et sympa",
+      author: "Greg",
+      date: "il y a 6 mois",
+      dateSort: "2024-12-19",
+      platform: "Google",
+      comment: "Très pro et sympa !! et à l'heure ! :-)"
     },
     {
       id: 35,
-      title: "Société très honnête",
-      author: "Paul et Marina",
-      date: "il y a 2 ans",
-      comment: "Très bonne expérience avec cette société, le chauffeur très sympathique et aux petits soins. Il nous a mis à l'aise tout en restant discret. Société très honnête qui communique facilement et tient ses engagements. Ils nous accompagneront dans nos prochaines vacances en avion. MERCI"
+      title: "Service parfait",
+      author: "Laurent G.",
+      date: "il y a 9 mois",
+      dateSort: "2024-09-19",
+      platform: "Google",
+      comment: "Service parfait, chauffeurs à l'heure à l'aller comme au retour et très sympa. Première expérience très positive, je recommande à 100%"
     },
     {
       id: 36,
-      title: "Service au top",
-      author: "Kevin et Lisa",
-      date: "il y a un an",
-      comment: "Nous recommandons fortement Spero Navette. Un service au top et ponctuelle et super sympa ! A très bientôt"
+      title: "Service honnête",
+      author: "M. Tubello",
+      date: "il y a 8 mois",
+      dateSort: "2024-10-19",
+      platform: "Google",
+      comment: "Super service et à l'heure. Très honnête compte tenu de la grève à l'aéroport de Charleroi: Mr Sperolini a accepté de nous prendre en charge 2 jours plus tard sans frais supplémentaires. Un grand merci !!"
     },
     {
       id: 37,
-      title: "Les yeux fermés",
-      author: "Sabrina T.",
-      date: "il y a 11 mois",
-      comment: "Je recommande les yeux fermés 😁 personnes très très sympathique ! Rendez vous au prochain voyage 🤩"
+      title: "Personnel hyper sympa et très ponctuel",
+      author: "Loretta C.",
+      date: "30 mars 2024",
+      dateSort: "2024-03-30",
+      platform: "Facebook",
+      comment: "Très très bien ! Très réactif aux messages, personnel hyper sympa et très ponctuel. Je recommande vivement"
     },
     {
       id: 38,
-      title: "Véhicules très propres",
-      author: "Maxime L.",
-      date: "il y a un an",
-      comment: "Super gentil à l'heure et véhicules très propre 👍 je recommande vivement 😍"
+      title: "Service au top! je recommande",
+      author: "Lina R.",
+      date: "29 juillet 2023",
+      dateSort: "2023-07-29",
+      platform: "Facebook",
+      comment: "Service au top! je recommande 👍"
     },
     {
       id: 39,
-      title: "Chauffeurs passionnés",
-      author: "Vincent R.",
-      date: "il y a un an",
-      comment: "Un service extra, une disponibilité à toute épreuve, le tout avec des chauffeurs qui aiment leur métier. Que demander de plus ? Je recommande vivement !"
+      title: "Super expérience! Chauffeurs ultra ponctuels",
+      author: "Gioia B.",
+      date: "2 novembre 2022",
+      dateSort: "2022-11-02",
+      platform: "Facebook",
+      comment: "Super expérience ! -Chauffeurs ultra ponctuels -Très très sympa -Service haut de gamme et véhicules tout confort !... En voir plus"
     },
     {
       id: 40,
-      title: "Réactivité exceptionnelle",
-      author: "Sandra M.",
+      title: "Je recommande à 100000%",
+      author: "Manu S.",
+      date: "18 septembre 2022",
+      dateSort: "2022-09-18",
+      platform: "Facebook",
+      comment: "C est un peu par hasard, que je me suis tournée vers Spero Navette et je recommande à 100000%. Très réactif lorsque j'ai envoyé un mail, personne 1000% sérieuse et très sympathique. Je recommande et je ferai appel à eux lors de mes prochains voyages."
+    },
+    {
+      id: 41,
+      title: "Échange téléphonique sympa, services sérieux",
+      author: "Amélie V.",
+      date: "5 août 2022",
+      dateSort: "2022-08-05",
+      platform: "Facebook",
+      comment: "C'est par hasard que je me tourne vers cette société de navette ... à la dernière minute 😱 Échange téléphonique sympa, services sérieux. N'hésitez pas, pour nous c'est notre navette attitrée pour les prochaines vacances 🌴"
+    },
+    {
+      id: 42,
+      title: "Spero Navette a été super réactif",
+      author: "Virginie P.",
+      date: "24 juillet 2022",
+      dateSort: "2022-07-24",
+      platform: "Facebook",
+      comment: "Partir au milieu de la nuit... changer l'heure 2 jours avant 😅. Spero Navette a été super réactif et à l'écoute. Je recommande à 100%. Merci pour votre professionnalisme et votre gentillesse. En résumé : que du positif 😊"
+    },
+    {
+      id: 43,
+      title: "Réactif ponctuel et très sympa",
+      author: "Katia I.",
+      date: "16 juin 2022",
+      dateSort: "2022-06-16",
+      platform: "Facebook",
+      comment: "Réactif ponctuel et très sympa merci pour le service 🙌"
+    },
+    {
+      id: 44,
+      title: "Partenaire de confiance",
+      author: "Philippe R.",
+      date: "il y a un an",
+      dateSort: "2024-06-19",
+      platform: "Google",
+      comment: "C'est toujours un plaisir de faire appel à leur service de navette. Ponctuel, sympathique et tarifs tout à fait compétitifs. Un vrai partenaire pour nos futurs déplacements vers l'aéroport."
+    },
+    {
+      id: 45,
+      title: "Chauffeur attentif",
+      author: "Anne S.",
+      date: "il y a un an",
+      dateSort: "2024-06-19",
+      platform: "Google",
+      comment: "Un service de grande qualité. Après un voyage fatiguant, il est bon de pouvoir compter sur une personne attentive et prudente pour nous ramener à la maison, de plus de nuit."
+    },
+    {
+      id: 46,
+      title: "Première expérience parfaite",
+      author: "Julie K.",
+      date: "il y a un an",
+      dateSort: "2024-06-19",
+      platform: "Google",
+      comment: "Première expérience de ce genre de service pour moi, mais très satisfaite du service reçu. Suivi nikel, le chauffeur à l'aller, nous prévient 10 minutes avant d'arriver au domicile et au retour nous indique l'heure de son arrivée."
+    },
+    {
+      id: 47,
+      title: "Excellent service",
+      author: "Grégoire M.",
+      date: "il y a un an",
+      dateSort: "2024-06-19",
+      platform: "Google",
+      comment: "Excellent service, amabilité, respect, serviabilité, ponctualité. A recommander, ce que j'ai déjà fait."
+    },
+    {
+      id: 48,
+      title: "Service depuis des années",
+      author: "Famille fidèle",
+      date: "il y a un an",
+      dateSort: "2024-06-19",
+      platform: "Google",
+      comment: "Service navette que nous prenons depuis des années. Ponctuel et toujours avec le sourire 🙂 nous en sommes très contents ! Nous recommandons sans hésiter !"
+    },
+    {
+      id: 49,
+      title: "Service extraordinaire",
+      author: "Amélie H.",
       date: "il y a 2 ans",
-      comment: "J'ai pris contact avec SPERO navette ce samedi en dernière minute afin de trouver un transport pour récupérer des amis à Zaventem à 2h30 du matin. Ils ont répondu présents malgré ma démarche tardive! Je recommande +++, professionnalisme et sérieux!"
+      dateSort: "2023-06-19",
+      platform: "Google",
+      comment: "MAGNIFIQUE Expérience avec Spero Navette. Nous les avons contacté suite aux recommandations de notre agence de voyage mais sans les connaître et quelle belle surprise! Tellement ravis de leur service. Leur ponctualité, leur gentillesse."
+    },
+    {
+      id: 50,
+      title: "Manu particulièrement agréable",
+      author: "Client enchanté",
+      date: "il y a 2 ans",
+      dateSort: "2023-06-19",
+      platform: "Google",
+      comment: "Je suis enchanté de la navette Spero, ponctualité et sérieux. Manu est particulièrement agréable et sympathique. Il est attentionné et animé d'un esprit spécifiquement orienté vers le meilleur service au client. A recommander sans modération."
     }
   ];
 
@@ -340,13 +514,13 @@ const Avis = () => {
   const applyFilters = () => {
     let filtered = [...avisClients];
     
-    // Tri
+    // Tri par date
     filtered.sort((a, b) => {
       if (filters.sortBy === 'oldest') {
-        return a.id - b.id;
+        return new Date(a.dateSort) - new Date(b.dateSort);
       }
       // Tri par date par défaut (plus récents en premier)
-      return b.id - a.id;
+      return new Date(b.dateSort) - new Date(a.dateSort);
     });
     
     setFilteredAvis(filtered);
@@ -392,7 +566,7 @@ const Avis = () => {
                   </div>
                   <StarRating rating={Math.round(averageRating)} size="w-6 h-6" />
                   <p className="text-gray-600 mt-2">
-                    Basé sur {totalReviews} avis Google My Business
+                    Basé sur {totalReviews} avis Google My Business et Facebook
                   </p>
                 </div>
               </div>
@@ -462,11 +636,28 @@ const Avis = () => {
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Laisser un avis sur Google
               </a>
+              <a 
+                href="https://facebook.com/speronavette"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-opacity-90 transition-colors"
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Laisser un avis sur Facebook
+              </a>
             </div>
+          </div>
+
+          {/* Note sur la publication des avis */}
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-500 italic">
+              Avis clients authentiques publiés sur Google My Business et Facebook - Dernière mise à jour : 19 juin 2025
+            </p>
           </div>
         </div>
       </div>
     </>
   );
 };
+
 export default Avis;
