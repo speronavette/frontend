@@ -1,7 +1,7 @@
-// 
+// ==========================================
 // FICHIER : components/StripePreAuthWrapper.jsx
 // Version complète corrigée pour Spero Navette
-// 
+// ==========================================
 
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -14,9 +14,9 @@ import {
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
-// 
+// ==========================================
 // STYLES POUR LE CARD ELEMENT
-// 
+// ==========================================
 const cardElementOptions = {
   style: {
     base: {
@@ -37,9 +37,9 @@ const cardElementOptions = {
   hidePostalCode: true, // ✅ CHANGEMENT : Masquer le code postal
 };
 
-// 
+// ==========================================
 // COMPOSANT PRINCIPAL DE PAIEMENT
-// 
+// ==========================================
 function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -59,9 +59,9 @@ function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
 
   const bookingRef = generateBookingRef();
 
-  // 
+  // ==========================================
   // CRÉER LE PAYMENT INTENT DE PRÉ-AUTORISATION
-  // 
+  // ==========================================
   useEffect(() => {
     if (!amount || !bookingData) return;
 
@@ -109,9 +109,9 @@ function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
     createPaymentIntent();
   }, [amount, bookingData]);
 
-  // 
+  // ==========================================
   // GÉRER LES CHANGEMENTS DU CARD ELEMENT
-  // 
+  // ==========================================
   const handleCardChange = (event) => {
     if (event.error) {
       setPaymentError(event.error.message);
@@ -121,9 +121,9 @@ function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
     setCardComplete(event.complete);
   };
 
-  // 
+  // ==========================================
   // TRAITEMENT DU FORMULAIRE DE PAIEMENT - VERSION CORRIGÉE
-  // 
+  // ==========================================
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -197,9 +197,9 @@ function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
     }
   };
 
-  // 
+  // ==========================================
   // RENDU DU COMPOSANT
-  // 
+  // ==========================================
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       
@@ -325,9 +325,9 @@ function StripePreAuthForm({ amount, bookingData, onPaymentSuccess, onBack }) {
   );
 }
 
-// 
+// ==========================================
 // WRAPPER AVEC STRIPE ELEMENTS
-// 
+// ==========================================
 function StripePreAuthWrapper(props) {
   return (
     <Elements stripe={stripePromise}>

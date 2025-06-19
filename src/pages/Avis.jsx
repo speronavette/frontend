@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, User, Calendar, ExternalLink, Filter } from 'lucide-react';
+import { Star, User, Calendar, ExternalLink, Filter } from '../components/Icons';
 
 const StarRating = ({ rating, size = "w-5 h-5" }) => {
   return (

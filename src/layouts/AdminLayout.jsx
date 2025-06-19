@@ -10,7 +10,7 @@ import {
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const menuItems = [
   {

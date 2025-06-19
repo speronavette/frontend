@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Plane, Clock, MapPin, CreditCard, Users, Shield, Phone, Calendar } from 'lucide-react';
+import { ChevronDown, ChevronUp, Plane, Clock, MapPin, CreditCard, Users, Shield, Phone, Calendar } from '../components/Icons';
 import SEO from '../components/SEO';
 
 const FAQItem = ({ question, answer, id, icon: Icon }) => {
