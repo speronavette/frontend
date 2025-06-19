@@ -661,3 +661,4 @@ const Avis = () => {
 };
 
 export default Avis;
+
