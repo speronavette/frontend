@@ -24,6 +24,7 @@ export default defineConfig({
   preview: {
     port: process.env.PORT || 4173,
     host: '0.0.0.0',
+    allowedHosts: ['spero-navette.be', 'www.spero-navette.be'],
     // Pas de HMR en production !
   },
   
@@ -61,5 +62,4 @@ export default defineConfig({
       }
     }
   }
-
 });
