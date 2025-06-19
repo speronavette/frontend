@@ -21,33 +21,6 @@ const blogPostsData = [
     readTime: '5 min',
     category: 'Conseils voyage',
     tags: ['aéroport été', 'conseils voyage', 'Zaventem', 'Charleroi', 'temps arrivée', 'navette aéroport']
-  },
-  {
-    id: 'vol-annule-retarde-droits-flexibilite-spero',
-    title: 'Vol annulé ou retardé : vos droits et notre flexibilité',
-    excerpt: 'Votre vol est annulé ou retardé ? Découvrez vos droits selon le règlement européen et comment Spero Navette s\'adapte à ces imprévus avec une politique d\'annulation flexible et humaine.',
-    date: '2024-06-20',
-    readTime: '8 min',
-    category: 'Conseils voyage',
-    tags: ['vol annulé', 'vol retardé', 'droits passagers', 'règlement européen', 'politique annulation', 'flexibilité transport']
-  },
-  {
-    id: 'transport-aeroport-professionnels-entreprises',
-    title: 'Transport aéroport pour vos déplacements professionnels : Spero Navette, votre partenaire fiable',
-    excerpt: 'Que vous soyez entrepreneur, commercial ou consultant, découvrez comment notre service de navette aéroport répond parfaitement aux besoins des professionnels. Même qualité, même fiabilité, sans surcoût.',
-    date: '2024-06-23',
-    readTime: '6 min',
-    category: 'Professionnel',
-    tags: ['navette business', 'déplacement professionnel', 'transport entreprise', 'Zaventem business', 'Charleroi business']
-  },
-  {
-    id: 'au-dela-aeroport-tous-nos-services-transport',
-    title: 'Au-delà de l\'aéroport : découvrez tous les services de transport Spero Navette',
-    excerpt: 'Mariages, concerts, rendez-vous médicaux, vacances en Belgique... Découvrez comment Spero Navette vous accompagne dans tous vos déplacements importants, pas seulement vers l\'aéroport.',
-    date: '2024-06-25',
-    readTime: '7 min',
-    category: 'Services',
-    tags: ['transport mariage', 'navette concert', 'transport médical', 'vacances Belgique', 'services transport']
   }
   // Les autres articles seront ajoutés au fur et à mesure de leur rédaction
 ];

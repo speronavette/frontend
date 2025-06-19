@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { DateRange } from 'react-date-range';
 import { fr } from 'date-fns/locale';
 import {
   LineChart,
@@ -15,8 +14,6 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import 'react-date-range/dist/styles.css';
-import 'react-date-range/dist/theme/default.css';
 
 export default function DashboardStats() {
   const [dateRange, setDateRange] = useState([

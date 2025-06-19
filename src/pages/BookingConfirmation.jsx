@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle, Phone, Mail, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Phone, Mail, ArrowLeft } from '../components/Icons';
 
 function BookingConfirmation() {
   const [searchParams] = useSearchParams();
