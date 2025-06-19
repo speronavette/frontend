@@ -1,46 +1,51 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-  plugins: [
-    react({
-      // Garder le fast refresh mais sans options problématiques
-      fastRefresh: true
-
-    })
-  ],
+  plugins: [react()],
+  
+  // Configuration serveur UNIQUEMENT pour développement local
   server: {
     port: 5173,
     host: true,
-    // Remettre progressivement vos options serveur
-    cors: true,
-    hmr: {
-      overlay: true
-    }
-  },
-  preview: {
-    host: '0.0.0.0',
-    port: 4173,
+    proxy: {
+      '/api': {
+        target: 'https://api.spero-navette.be',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    },
     cors: true
   },
+  
+  // Configuration preview pour production
+  preview: {
+    port: process.env.PORT || 4173,
+    host: '0.0.0.0',
+    // Pas de HMR en production !
+  },
+  
   resolve: {
     alias: {
-      // Correction de l'alias @ - plus robuste
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': path.resolve(__dirname, './src')
     }
   },
+  
   build: {
     outDir: 'dist',
     sourcemap: false,
-    // Commencer avec esbuild, puis passer à terser si nécessaire
-    minify: 'esbuild',
-    target: 'es2015',
-    emptyOutDir: true,
-    
-    // Remettre progressivement vos optimisations rollup
+    minify: 'terser',
+    chunkSizeWarningLimit: 1000,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
     rollupOptions: {
+      // Retiré 'react-helmet-async' d'external car il doit être bundlé
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
@@ -52,29 +57,8 @@ export default defineConfig({
             }
             return 'vendor';
           }
-        },
-        chunkFileNames: 'js/[name]-[hash].js',
-        entryFileNames: 'js/main-[hash].js',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith('.css')) {
-            return 'css/[name]-[hash].[ext]'
-          }
-          return 'assets/[name]-[hash].[ext]'
         }
       }
     }
-  },
-  
-  esbuild: {
-    target: 'es2015',
-    legalComments: 'none'
-  },
-  
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-router-dom'
-    ]
   }
 });
