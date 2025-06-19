@@ -18,12 +18,9 @@ export default defineConfig({
   preview: {
     port: process.env.PORT || 4173,
     host: '0.0.0.0',
-    allowedHosts: [
-      'spero-navette.be',
-      'www.spero-navette.be',
-      'frontend-6zq4.onrender.com',
-      '.onrender.com'  // Permet tous les sous-domaines onrender.com
-    ],
+    allowedHosts: ['spero-navette.be', 'www.spero-navette.be'],
+    // Pas de HMR en production !
+
   },
   
   // Configuration de base
@@ -44,4 +41,5 @@ export default defineConfig({
       }
     }
   }
-})
+});
+
