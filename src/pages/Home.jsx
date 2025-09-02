@@ -518,7 +518,6 @@ function Home() {
                 Liaisons régulières vers les aéroports allemands et néerlandais. 
                 Service porte-à-porte sans correspondance.
               </p>
-              // SUITE DE LA PAGE D'ACCUEIL OPTIMISÉE (à partir de la section Cologne/Düsseldorf)
 
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start">
