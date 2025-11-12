@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Service de navette aéroport depuis le Hainaut vers Bruxelles-Zaventem, Charleroi et Paris CDG. Transport 24/7, tarifs compétitifs, 189 avis 4.9/5. Réservation en ligne rapide !" />
+    
+    <!-- Preconnect pour ressources critiques (connexion TCP anticipée) -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="preconnect" href="https://api.spero-navette.be" crossorigin>
+    
+    <!-- DNS Prefetch en fallback pour navigateurs anciens -->
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//api.spero-navette.be">
+    
+    <title>Navette Aéroport Charleroi, Bruxelles & Paris | Spero Navette 24/7</title>
+    
+    <!-- CSS CRITIQUE INLINE pour éliminer le render-blocking -->
+    <!-- Ce CSS couvre tous les éléments "above the fold" (visibles sans scroll) -->
+    <style>
+      /* Reset et base */
+      * { box-sizing: border-box; }
+      body { 
+        margin: 0; 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Couleurs Spero Navette */
+      .bg-spero { background-color: #8B5CF6; }
+      .text-spero { color: #8B5CF6; }
+      .border-spero { border-color: #8B5CF6; }
+      .focus\:border-spero:focus { border-color: #8B5CF6; }
+      .focus\:ring-spero:focus { --tw-ring-color: #8B5CF6; }
+      .hover\:bg-opacity-90:hover { background-color: rgba(139, 92, 246, 0.9); }
+      .hover\:bg-spero-5:hover { background-color: rgba(139, 92, 246, 0.05); }
+      
+      /* Layout de base */
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+      .max-w-md { max-width: 28rem; }
+      .max-w-2xl { max-width: 42rem; }
+      .max-w-3xl { max-width: 48rem; }
+      .max-w-4xl { max-width: 56rem; }
+      .max-w-6xl { max-width: 72rem; }
+      .mx-auto { margin-left: auto; margin-right: auto; }
+      
+      /* Padding et margin */
+      .p-2 { padding: 0.5rem; }
+      .p-3 { padding: 0.75rem; }
+      .p-4 { padding: 1rem; }
+      .p-6 { padding: 1.5rem; }
+      .p-8 { padding: 2rem; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+      .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+      .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+      .mb-2 { margin-bottom: 0.5rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-8 { margin-bottom: 2rem; }
+      .mb-12 { margin-bottom: 3rem; }
+      .mb-16 { margin-bottom: 4rem; }
+      .mr-2 { margin-right: 0.5rem; }
+      .mt-1 { margin-top: 0.25rem; }
+      .mt-4 { margin-top: 1rem; }
+      .mt-8 { margin-top: 2rem; }
+      
+      /* Flexbox et grid */
+      .flex { display: flex; }
+      .flex-col { flex-direction: column; }
+      .flex-row { flex-direction: row; }
+      .items-center { align-items: center; }
+      .items-start { align-items: flex-start; }
+      .justify-center { justify-content: center; }
+      .justify-between { justify-content: space-between; }
+      .space-x-4 > * + * { margin-left: 1rem; }
+      .space-y-4 > * + * { margin-top: 1rem; }
+      .space-y-6 > * + * { margin-top: 1.5rem; }
+      .gap-4 { gap: 1rem; }
+      .gap-6 { gap: 1.5rem; }
+      .gap-8 { gap: 2rem; }
+      .grid { display: grid; }
+      .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+      
+      /* Grid responsive */
+      @media (min-width: 640px) {
+        .sm\:flex-row { flex-direction: row; }
+        .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      }
+      @media (min-width: 768px) {
+        .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+      @media (min-width: 1024px) {
+        .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+      }
+      
+      /* Largeurs */
+      .w-full { width: 100%; }
+      .w-8 { width: 2rem; }
+      .w-12 { width: 3rem; }
+      .h-5 { height: 1.25rem; }
+      .h-8 { height: 2rem; }
+      .h-12 { width: 3rem; height: 3rem; }
+      
+      /* Borders */
+      .border { border-width: 1px; }
+      .border-2 { border-width: 2px; }
+      .border-gray-300 { border-color: #d1d5db; }
+      .border-red-500 { border-color: #ef4444; }
+      .rounded-md { border-radius: 0.375rem; }
+      .rounded-lg { border-radius: 0.5rem; }
+      .rounded-full { border-radius: 9999px; }
+      .border-t-transparent { border-top-color: transparent; }
+      
+      /* Backgrounds */
+      .bg-white { background-color: #ffffff; }
+      .bg-gray-50 { background-color: #f9fafb; }
+      .bg-gray-100 { background-color: #f3f4f6; }
+      
+      /* Text */
+      .text-center { text-align: center; }
+      .text-left { text-align: left; }
+      .text-white { color: #ffffff; }
+      .text-gray-600 { color: #4b5563; }
+      .text-gray-700 { color: #374151; }
+      .text-gray-900 { color: #111827; }
+      .text-red-500 { color: #ef4444; }
+      .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+      .text-base { font-size: 1rem; line-height: 1.5rem; }
+      .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+      .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+      .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+      .font-medium { font-weight: 500; }
+      .font-semibold { font-weight: 600; }
+      .font-bold { font-weight: 700; }
+      .leading-relaxed { line-height: 1.625; }
+      .leading-tight { line-height: 1.25; }
+      
+      /* Shadows */
+      .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+      .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+      .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+      .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+      .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+      
+      /* Transitions */
+      .transition-colors { 
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .transition-all { 
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .transition-opacity { 
+        transition-property: opacity;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .hover\:text-opacity-80:hover { color: rgba(255, 255, 255, 0.8); }
+      .hover\:opacity-80:hover { opacity: 0.8; }
+      .hover\:underline:hover { text-decoration-line: underline; }
+      
+      /* Animation */
+      .animate-spin { animation: spin 1s linear infinite; }
+      @keyframes spin { 
+        to { transform: rotate(360deg); } 
+      }
+      
+      /* Mise en page */
+      .min-h-screen { min-height: 100vh; }
+      .min-h-\[200px\] { min-height: 200px; }
+      .flex-grow { flex-grow: 1; }
+      .flex-shrink-0 { flex-shrink: 0; }
+      .block { display: block; }
+      .inline-block { display: inline-block; }
+      .hidden { display: none; }
+      .scroll-mt-24 { scroll-margin-top: 6rem; }
+      
+      /* Focus states */
+      .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+      .focus\:ring-1:focus { 
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+      .focus\:ring-2:focus { 
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      }
+      .focus\:ring-spero:focus { --tw-ring-color: #8B5CF6; }
+      
+      /* Utilitaires */
+      .sr-only { 
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+      .fill-current { fill: currentColor; }
+      .object-cover { object-fit: cover; }
+      .overflow-hidden { overflow: hidden; }
+      .relative { position: relative; }
+      .absolute { position: absolute; }
+      .z-10 { z-index: 10; }
+      .z-50 { z-index: 50; }
+      
+      /* Optimization: Hide non-critical content during load */
+      .lazy-load { 
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .lazy-load.loaded { 
+        opacity: 1;
+      }
+      
+      /* Loading spinner (si nécessaire) */
+      .spinner {
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #8B5CF6;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) - Version de secours si JavaScript désactivé -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5ZT8KSZD"
+              height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Conteneur principal de l'application React -->
+    <div id="root"></div>
+    
+    <!-- Chargement du bundle JavaScript React (module ES6) -->
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Google Tag Manager - PLACÉ ICI pour ne PAS bloquer le rendu -->
+    <!-- Ce script se charge de manière asynchrone après le contenu principal -->
+    <script>
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),
+            dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5ZT8KSZD');
+    </script>
+    <!-- End Google Tag Manager -->
+  </body>
+</html>
