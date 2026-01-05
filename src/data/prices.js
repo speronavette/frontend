@@ -4402,24 +4402,22 @@ export const AIRPORT_MAPPING = {
 export const calculatePrice = (postalCode, airport, passengers) => {
     const key = `${postalCode}-${airport}`;
     const basePrice = pricesDB[key] || 0;
-
     if (basePrice === 0) {
         return { sharedPrice: 0, privatePrice: 0 };
     }
-
-  // Calcul du supplément passagers
-  let supplement = 0;
-  switch(Number(passengers)) {
-    case 3: supplement = 6; break;
-    case 4: supplement = 12; break;
-    case 5: supplement = 18; break;
-    case 6: supplement = 22; break;
-    case 7: supplement = 40; break;
-    case 8: supplement = 50; break;
-  }
-
-  return {
-    sharedPrice: basePrice + supplement,
-    privatePrice: basePrice + 45  // Prix pour 8 personnes
-  };
+    // Calcul du supplément passagers
+    let supplement = 0;
+    switch(Number(passengers)) {
+        case 2: supplement = 6; break;
+        case 3: supplement = 12; break;
+        case 4: supplement = 18; break;
+        case 5: supplement = 24; break;
+        case 6: supplement = 36; break;
+        case 7: supplement = 48; break;
+        case 8: supplement = 60; break;
+    }
+    return {
+        sharedPrice: basePrice + supplement,
+        privatePrice: basePrice + 60
+    };
 };
