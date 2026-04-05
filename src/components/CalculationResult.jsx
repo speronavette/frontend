@@ -97,14 +97,6 @@ function CalculationResult() {
           </div>
         </div>
 
-        {/* Bannière hausse carburant */}
-        <div className="mt-6 flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          <span>⚠️</span>
-          <p>
-            En raison de la hausse des prix du carburant, nos tarifs ont été réajustés afin de maintenir la qualité de notre service. Nous vous remercions de votre compréhension.
-          </p>
-        </div>
-
         <div className="mt-8 flex justify-center space-x-4">
           <button
             onClick={() => navigate(-1)}
