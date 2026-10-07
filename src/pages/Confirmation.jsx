@@ -606,7 +606,7 @@ function Confirmation() {
     return (
         <>
             <SEO
-                title="Votre réservation est confirmée"
+                title="Demande de réservation envoyée"
                 description={getMetaDescription()}
                 keywords="confirmation navette, réservation aéroport, transport Bruxelles, navette Charleroi, détails transfert"
             />
@@ -614,10 +614,10 @@ function Confirmation() {
             <div className="max-w-4xl mx-auto p-6">
                 <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl p-8">
                     <div className="text-center mb-8">
-                        <h2 className="text-2xl font-semibold mb-4">Votre réservation Spero Navette est confirmée</h2>
-                        <p className="text-lg text-gray-600">
-                            Votre demande de réservation a été envoyée avec succès.
-                        </p>
+                        <h2 className="text-2xl font-semibold mb-4">Votre demande de réservation a été envoyée avec succès</h2>
+<p className="text-lg text-gray-600">
+    Vous recevrez un email de confirmation dès que votre demande aura été traitée.
+</p>
                     </div>
 
                     {booking && (
