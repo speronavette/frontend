@@ -89,7 +89,7 @@ function CalculationResult() {
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900 text-center">
             <p className="font-semibold mb-1">🎄 Supplément de 50 % les 24-25 décembre et 31 décembre-1er janvier</p>
             <p>
-              Du 24/12/2026 à partir de 14h00 au 25/12/2026 jusqu'à 23h59, et du 31/12/2026 à partir de 14h00 au 01/01/2027 jusqu'à 23h59, une surcharge de 50 % s'applique sur le prix de la navette.
+              Du 24/12/2026 à partir de 14h00 au 25/12/2026 inclus, et du 31/12/2026 à partir de 14h00 au 01/01/2027 inclus, un supplément de 50 % s’applique sur le prix de la navette.
             </p>
             <p className="text-xs mt-1 text-amber-800">(heure de décollage ou d'atterrissage du vol)</p>
           </div>
