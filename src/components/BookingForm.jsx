@@ -992,14 +992,14 @@ function BookingForm() {
              <div className="flex items-center">
                <input
                  type="radio"
-                 id="payment-transfer"
+                 id="payment-card"
                  name="paymentMethod"
-                 value="transfer"
-                 checked={additionalInfo.paymentMethod === 'transfer'}
+                 value="card"
+                 checked={additionalInfo.paymentMethod === 'card'}
                  onChange={handleAdditionalInfoChange}
                  className="mr-2"
                />
-               <label htmlFor="payment-transfer">Par virement bancaire maximum 5 jours avant la prise en charge</label>
+               <label htmlFor="payment-card">Par carte au chauffeur le jour de la navette</label>
              </div>
 
              <div className="flex items-center">
