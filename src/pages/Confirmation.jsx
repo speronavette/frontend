@@ -195,6 +195,16 @@ function Confirmation() {
                     </div>
                 );
                 
+            case 'card':
+                return (
+                    <div className="flex items-start gap-3">
+                        <CreditCard className="h-5 w-5 text-spero mt-0.5" />
+                        <div>
+                            <p className="font-medium">Par carte au chauffeur le jour de la navette</p>
+                        </div>
+                    </div>
+                );
+
             case 'transfer':
                 return (
                     <div className="flex items-start gap-3">
