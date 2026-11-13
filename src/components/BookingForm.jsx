@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { calculatePrice, pricesDB } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
+import { isTransferDeadlinePassed } from '../utils/paymentDeadline';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
 import SEO from '../components/SEO'; // Importation du composant SEO
@@ -89,6 +90,12 @@ function BookingForm() {
  });
 
  const [serviceType, setServiceType] = useState('shared');
+
+ // Modes de paiement autorisés selon le type de navette
+ const PAYMENT_METHODS_BY_SERVICE = {
+   shared: ['cash', 'card', 'invoice'],
+   private: ['transfer', 'invoice']
+ };
  const [journeyType, setJourneyType] = useState('roundTrip');
  const [price, setPrice] = useState(formData.prices || { sharedPrice: 0, privatePrice: 0 });
 
@@ -121,6 +128,15 @@ function BookingForm() {
    vatNumber: '',
    comments: ''
  });
+
+ // Si le mode de paiement choisi n'est pas autorisé pour ce type de navette, on bascule sur le mode par défaut
+ useEffect(() => {
+   const allowed = PAYMENT_METHODS_BY_SERVICE[serviceType] || PAYMENT_METHODS_BY_SERVICE.shared;
+   if (!allowed.includes(additionalInfo.paymentMethod)) {
+     setAdditionalInfo(prev => ({ ...prev, paymentMethod: allowed[0] }));
+   }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [serviceType]);
 
  // Fonction de validation pour le numéro de TVA
  const validateVatNumber = (vatNumber) => {
@@ -975,32 +991,61 @@ function BookingForm() {
          <div className="mt-6">
            <label className="block mb-2 font-medium">Méthode de paiement *</label>
            <div className="space-y-2">
-             <div className="flex items-center">
-               <input
-                 type="radio"
-                 id="payment-cash"
-                 name="paymentMethod"
-                 value="cash"
-                 checked={additionalInfo.paymentMethod === 'cash'}
-                 onChange={handleAdditionalInfoChange}
-                 className="mr-2"
-                 required
-               />
-               <label htmlFor="payment-cash">En espèces au chauffeur le jour de la navette</label>
-             </div>
+             {serviceType === 'shared' && (
+               <>
+                 <div className="flex items-center">
+                   <input
+                     type="radio"
+                     id="payment-cash"
+                     name="paymentMethod"
+                     value="cash"
+                     checked={additionalInfo.paymentMethod === 'cash'}
+                     onChange={handleAdditionalInfoChange}
+                     className="mr-2"
+                     required
+                   />
+                   <label htmlFor="payment-cash">En espèces au chauffeur le jour de la navette</label>
+                 </div>
 
-             <div className="flex items-center">
-               <input
-                 type="radio"
-                 id="payment-card"
-                 name="paymentMethod"
-                 value="card"
-                 checked={additionalInfo.paymentMethod === 'card'}
-                 onChange={handleAdditionalInfoChange}
-                 className="mr-2"
-               />
-               <label htmlFor="payment-card">Par carte au chauffeur le jour de la navette</label>
-             </div>
+                 <div className="flex items-center">
+                   <input
+                     type="radio"
+                     id="payment-card"
+                     name="paymentMethod"
+                     value="card"
+                     checked={additionalInfo.paymentMethod === 'card'}
+                     onChange={handleAdditionalInfoChange}
+                     className="mr-2"
+                   />
+                   <label htmlFor="payment-card">Par carte au chauffeur le jour de la navette</label>
+                 </div>
+               </>
+             )}
+
+             {serviceType === 'private' && (
+               <div className="flex items-center">
+                 <input
+                   type="radio"
+                   id="payment-transfer"
+                   name="paymentMethod"
+                   value="transfer"
+                   checked={additionalInfo.paymentMethod === 'transfer'}
+                   onChange={handleAdditionalInfoChange}
+                   className="mr-2"
+                   required
+                 />
+                 <label htmlFor="payment-transfer">Par virement bancaire au plus tard 5 jours ouvrables avant la prise en charge pour valider le transfert</label>
+               </div>
+             )}
+
+             {serviceType === 'private' && additionalInfo.paymentMethod === 'transfer' && isTransferDeadlinePassed([
+               (journeyType === 'outbound' || journeyType === 'roundTrip') ? outboundJourney.date : null,
+               (journeyType === 'inbound' || journeyType === 'roundTrip') ? inboundJourney.date : null
+             ]) && (
+               <div className="ml-6 p-3 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-900">
+                 Votre prise en charge a lieu dans moins de 5 jours ouvrables : virement à réaliser dès réception de la confirmation pour valider le transfert.
+               </div>
+             )}
 
              <div className="flex items-center">
                <input

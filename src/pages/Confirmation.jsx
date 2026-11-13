@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, CreditCard, Users, Calendar, MapPin, Luggage, Clock } from 'lucide-react';
 import SEO from '../components/SEO'; // Importation du composant SEO
+import { isTransferDeadlinePassed, TRANSFER_TEXT_STANDARD, TRANSFER_TEXT_URGENT } from '../utils/paymentDeadline';
 
 function Confirmation() {
     const navigate = useNavigate();
@@ -211,7 +212,14 @@ function Confirmation() {
                         <CreditCard className="h-5 w-5 text-spero mt-0.5" />
                         <div>
                             <p className="font-medium">Par virement bancaire</p>
-                            <p className="mt-2 text-sm text-gray-600">Veuillez effectuer le paiement au moins 5 jours avant la date du transfert.</p>
+                            <p className="mt-2 text-sm text-gray-600">
+                                {isTransferDeadlinePassed([
+                                    booking.journey?.outbound?.date,
+                                    booking.journey?.inbound?.date,
+                                    booking.outbound?.journey?.outbound?.date,
+                                    booking.inbound?.journey?.inbound?.date
+                                ]) ? TRANSFER_TEXT_URGENT : TRANSFER_TEXT_STANDARD}.
+                            </p>
                             <div className="mt-3 p-3 bg-gray-50 rounded">
                                 <p className="font-medium">Coordonnées bancaires:</p>
                                 <p>Compte: BE64 3630 0968 1852</p>
