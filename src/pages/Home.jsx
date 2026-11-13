@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
+import TrustHighlights, { FeaturedReviews } from '../components/TrustHighlights';
 import { calculatePrice } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 
@@ -252,7 +253,7 @@ function Home() {
     <>
       <SEO
   title="Navette Aéroport Charleroi, Bruxelles & Paris | Spero Navette 24/7"
-  description="Service de navette aéroport depuis le Hainaut vers Bruxelles, Charleroi, Paris CDG. Transport 24/7, tarifs compétitifs, plus de 350 avis 4,9/5. Devis gratuit en ligne !"
+  description="Service de navette aéroport depuis le Hainaut vers Bruxelles, Charleroi, Paris CDG. Transport 24/7, tarifs compétitifs, 374 avis 4,9/5. Devis gratuit en ligne !"
   keywords="navette aéroport, transport aéroport hainaut, navette charleroi, navette bruxelles, navette paris cdg, taxi aéroport belgique, transfert aéroport charleroi"
   canonicalUrl="https://spero-navette.be/">
         <script type="application/ld+json">
@@ -264,6 +265,8 @@ function Home() {
       </SEO>
 
       <div className="container mx-auto px-4 py-8">
+        <TrustHighlights className="mb-8" />
+
         {/* ========== CALCULATEUR DE PRIX (votre outil central) ========== */}
         <section id="calculator" className="max-w-md mx-auto mb-16 scroll-mt-24">
           <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl">
@@ -368,6 +371,8 @@ function Home() {
             </div>
           </div>
         </section>
+
+        <FeaturedReviews className="mb-16" />
 
         {/* ========== HERO SECTION ========== */}
         <section className="mb-12">

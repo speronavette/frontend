@@ -132,17 +132,21 @@ const Footer = memo(() => (
       </div>
       <div>
         <h3 className="font-bold">Nous contacter</h3>
-        <p>Téléphone: <a href="tel:+32490197914" className="hover:underline">0490/19.79.14</a></p>
-        <p>Email: <a href="mailto:info@spero-navette.be" className="hover:underline">info@spero-navette.be</a></p>
+        <p>Téléphone : <a href="tel:+32490197914" className="hover:underline">0490 19 79 14</a></p>
+        <p>WhatsApp : <a href="https://wa.me/32490197914" target="_blank" rel="noopener noreferrer" className="hover:underline">0490 19 79 14</a></p>
+        <p>Email : <a href="mailto:info@spero-navette.be" className="hover:underline">info@spero-navette.be</a></p>
         <p className="mt-2">
-          <span className="block">Horaires d&apos;ouverture:</span>
-          <span className="block text-sm">Lundi au vendredi: 10h - 19h</span>
-          <span className="block text-sm">Samedi: 10h - 16h</span>
+          <span className="block">Téléphone :</span>
+          <span className="block text-sm">Lundi au vendredi : 10h - 19h</span>
+          <span className="block text-sm">Samedi : 10h - 16h</span>
         </p>
+        <p className="mt-2 text-sm">Réservation en ligne 24h/24 · Navettes 24h/24, 7j/7</p>
       </div>
     </div>
     <div className="max-w-6xl mx-auto px-4 mt-8 pt-4 border-t border-white/30 text-sm text-center">
-      <p>© {new Date().getFullYear()} Spero Navette SRL. Tous droits réservés. | Navette aéroport Bruxelles, Charleroi et toutes destinations</p>
+      <p>Spero Navette SRL · BE 1007.320.551 · Rue du Centenaire 87, 6032 Mont-sur-Marchienne (Charleroi)</p>
+      <p className="mt-1">Transporteur agréé et assuré</p>
+      <p className="mt-2">© {new Date().getFullYear()} Spero Navette SRL. Tous droits réservés. | Navette aéroport Bruxelles, Charleroi et toutes destinations</p>
     </div>
   </footer>
 ));

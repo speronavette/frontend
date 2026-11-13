@@ -27,7 +27,7 @@ const charleroiAirportStructuredData = {
     "ratingValue": "4.9",
     "bestRating": "5",
     "worstRating": "1",
-    "reviewCount": "189"
+    "reviewCount": "374"
   },
   "areaServed": [
     {
@@ -321,7 +321,7 @@ const GoogleReviewsCarousel = () => {
           <div className="flex">{renderStars(5)}</div>
           <span className="text-2xl font-bold text-gray-800">4,9/5</span>
         </div>
-        <p className="text-gray-600">Basé sur plus de 350 avis Google</p>
+        <p className="text-gray-600">Basé sur 374 avis Google</p>
         <a
           href="https://www.google.com/maps/place/Spero+Navette" 
           target="_blank"
