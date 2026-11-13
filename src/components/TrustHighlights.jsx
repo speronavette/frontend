@@ -27,9 +27,6 @@ export default function TrustHighlights({ className = '' }) {
           <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
           Prix fixe, bagages et attente compris, aucun supplément
         </p>
-        <p className="mt-1 text-xs text-gray-500">
-          Seules exceptions : +50 % les 24-25/12 et 31/12-01/01 (à partir de 14h) et un petit supplément à partir de la 3<sup>e</sup> personne, déjà inclus dans le prix calculé.
-        </p>
 
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
           <a

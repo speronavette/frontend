@@ -323,7 +323,7 @@ const GoogleReviewsCarousel = () => {
         </div>
         <p className="text-gray-600">Basé sur 374 avis Google</p>
         <a
-          href="https://www.google.com/maps/place/Spero+Navette" 
+          href="https://g.page/r/CQTXwFtumGyuEBM" 
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 hover:underline text-sm mt-2 inline-block"

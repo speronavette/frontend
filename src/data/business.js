@@ -1,7 +1,7 @@
 // Infos de confiance affichées sur le site : à mettre à jour ici uniquement.
 export const GOOGLE_RATING = '4,9';
 export const GOOGLE_REVIEW_COUNT = 374;
-export const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/Spero+Navette';
+export const GOOGLE_MAPS_URL = 'https://g.page/r/CQTXwFtumGyuEBM';
 
 export const ZAVENTEM_FROM_PRICE = 104;
 
