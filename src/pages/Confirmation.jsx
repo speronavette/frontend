@@ -220,11 +220,9 @@ function Confirmation() {
                                     booking.inbound?.journey?.inbound?.date
                                 ]) ? TRANSFER_TEXT_URGENT : TRANSFER_TEXT_STANDARD}.
                             </p>
-                            <div className="mt-3 p-3 bg-gray-50 rounded">
-                                <p className="font-medium">Coordonnées bancaires:</p>
-                                <p>Compte: BE64 3630 0968 1852</p>
-                                <p>Bénéficiaire: Spero Navette SRL</p>
-                                <p>Communication: "{client?.lastName} {client?.firstName} {client?.address?.postalCode}"</p>
+                            <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-900">
+                                <p className="font-medium">Ne faites pas encore de virement.</p>
+                                <p>Nous vérifions d'abord la disponibilité de votre navette. Restez attentif : les coordonnées bancaires vous seront communiquées rapidement par email.</p>
                             </div>
                         </div>
                     </div>
