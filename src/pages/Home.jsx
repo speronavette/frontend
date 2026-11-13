@@ -253,7 +253,7 @@ function Home() {
     <>
       <SEO
   title="Navette Aéroport Charleroi, Bruxelles & Paris | Spero Navette 24/7"
-  description="Service de navette aéroport depuis le Hainaut vers Bruxelles, Charleroi, Paris CDG. Transport 24/7, tarifs compétitifs, 374 avis 4,9/5. Devis gratuit en ligne !"
+  description="Service de navette aéroport depuis le Hainaut vers Bruxelles, Charleroi, Paris CDG. Transport 24/7, tarifs compétitifs, 389 avis 4,9/5. Devis gratuit en ligne !"
   keywords="navette aéroport, transport aéroport hainaut, navette charleroi, navette bruxelles, navette paris cdg, taxi aéroport belgique, transfert aéroport charleroi"
   canonicalUrl="https://spero-navette.be/">
         <script type="application/ld+json">
