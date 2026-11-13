@@ -130,7 +130,7 @@ const FAQ = () => {
       id: "annulation-frais",
       icon: Shield,
       question: "Quels sont les frais d'annulation ?",
-      answer: "Notre politique d'annulation est flexible :\n• Annulation gratuite jusqu'à 12h avant le départ\n• Moins de 12h avant : 50% du montant avec minimum 50€\n• Modification gratuite selon disponibilités\n\nEn cas de force majeure (grève, annulation de vol avec justificatif), nous étudions chaque situation individuellement."
+      answer: "Notre politique d'annulation est flexible :\n• Annulation gratuite jusqu'à 12h avant le départ\n• Moins de 12h avant : 50% du montant avec minimum 50€\n• Absence le jour J sans annulation (no-show) : prix complet de la navette\n• Modification gratuite selon disponibilités\n\nEn cas de force majeure (grève, annulation de vol avec justificatif), nous étudions chaque situation individuellement."
     }
   ];
 

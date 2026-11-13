@@ -249,36 +249,6 @@ function Confirmation() {
         }
     };
 
-    // Rendu de la source de référence
-    const renderReferralSource = () => {
-        if (!booking) return null;
-        
-        const recommendedBy = booking.isRoundTrip 
-            ? booking.outbound.recommendedBy 
-            : booking.recommendedBy;
-            
-        const agencyName = booking.isRoundTrip 
-            ? booking.outbound.agencyName 
-            : booking.agencyName;
-            
-        if (!recommendedBy) return null;
-        
-        const sources = {
-            'google': 'Google',
-            'facebook': 'Facebook',
-            'agency': `Agence de voyage${agencyName ? ': ' + agencyName : ''}`,
-            'recommendation': 'Recommandation d\'un proche',
-            'advertisement': 'Publicité',
-            'other': 'Autre'
-        };
-
-        return (
-            <div className="flex items-center gap-2">
-                <p>{sources[recommendedBy] || recommendedBy}</p>
-            </div>
-        );
-    };
-
     // Envoi des données de source de référence à Google Analytics
     useEffect(() => {
         if (booking && window.gtag) {
@@ -317,66 +287,8 @@ function Confirmation() {
         const fetchBookingDetails = async () => {
             try {
                 if (!location.state) {
-                    console.log("Aucune donnée de réservation trouvée - Mode conversion directe activé");
-                    
-                    // Au lieu de générer une erreur, déclenchons un suivi de conversion
-                    if (window.gtag) {
-                        console.log("Envoi d'un événement de conversion depuis la page de confirmation");
-                        window.gtag('event', 'conversion', {
-                            'send_to': 'AW-704820281/KeZGCNiw36waELnoitAC',
-                            'value': 100, // Valeur par défaut
-                            'currency': 'EUR',
-                            'transaction_id': 'DIRECT-' + Date.now().toString()
-                        });
-                        
-                        // Également envoyer l'événement reservation_confirmee pour GA4
-                        window.gtag('event', 'reservation_confirmee', {
-                            transaction_id: 'DIRECT-' + Date.now().toString(),
-                            value: 100,
-                            currency: 'EUR',
-                            service_type: 'direct_page',
-                            booking_type: 'direct'
-                        });
-                        
-                        console.log("✅ Événements de conversion envoyés avec succès");
-                    } else {
-                        console.error("gtag n'est pas disponible pour le suivi de conversion");
-                    }
-                    
-                    // Afficher une page de confirmation générique au lieu d'une erreur
-                    setBooking({
-                        isRoundTrip: false,
-                        serviceType: 'shared',
-                        price: { sharedPrice: 100, privatePrice: 150 },
-                        client: {
-                            firstName: "Client",
-                            lastName: "Spero",
-                            email: "client@exemple.com",
-                            phone: "0490000000",
-                            address: {
-                                street: "Exemple de rue",
-                                number: "123",
-                                postalCode: "1000",
-                                city: "Bruxelles"
-                            }
-                        },
-                        journey: {
-                            outbound: {
-                                date: new Date().toISOString().split('T')[0],
-                                time: "10:00",
-                                airport: "BRU"
-                            }
-                        },
-                        passengers: 2,
-                        options: {
-                            luggageCount: 2,
-                            handLuggageCount: 2,
-                            childSeatsCount: 0,
-                            boosterSeatsCount: 0
-                        }
-                    });
-                    
-                    setLoading(false);
+                    // Pas de réservation (accès direct, robot...) : pas de conversion, retour à l'accueil
+                    navigate('/', { replace: true });
                     return;
                 }
     
@@ -473,8 +385,9 @@ function Confirmation() {
                     : Number(booking.price?.sharedPrice || 0);
             }
             
-            // Générer un ID de transaction unique
-            const transactionId = Date.now().toString();
+            // ID de la réservation en base : Google déduplique si la page est rechargée
+            const transactionId = (booking.isRoundTrip ? booking.outbound?.bookingReference : booking.bookingReference)
+                || Date.now().toString();
 
             // ✅ Événement GA4 "purchase" 
             window.gtag('event', 'purchase', {
@@ -522,44 +435,6 @@ function Confirmation() {
             });
         }
     }, [booking]);
-    
-    // Suivi de conversion de secours (au cas où le tracking principal échoue)
-    useEffect(() => {
-        const sendBackupConversion = () => {
-            if (window.gtag) {
-                if (document.readyState === 'complete') {
-                    console.log("Envoi d'un événement de conversion de secours");
-                    window.gtag('event', 'conversion', {
-                        'send_to': 'AW-704820281/KeZGCNiw36waELnoitAC',
-                        'value': 100,
-                        'currency': 'EUR',
-                        'transaction_id': 'BACKUP-' + Date.now().toString()
-                    });
-                    
-                    // Backup pour reservation_confirmee aussi
-                    window.gtag('event', 'reservation_confirmee', {
-                        'transaction_id': 'BACKUP-' + Date.now().toString(),
-                        'value': 100,
-                        'currency': 'EUR'
-                    });
-                } else {
-                    window.addEventListener('load', () => {
-                        console.log("Envoi d'un événement de conversion de secours (après chargement)");
-                        window.gtag('event', 'conversion', {
-                            'send_to': 'AW-704820281/KeZGCNiw36waELnoitAC',
-                            'value': 100,
-                            'currency': 'EUR',
-                            'transaction_id': 'BACKUP-LOAD-' + Date.now().toString()
-                        });
-                    });
-                }
-            }
-        };
-        
-        const timeoutId = setTimeout(sendBackupConversion, 1500);
-        
-        return () => clearTimeout(timeoutId);
-    }, []);
     
     // Construction dynamique des méta-données pour la page de confirmation
     const getMetaDescription = () => {
@@ -630,10 +505,14 @@ function Confirmation() {
             <div className="max-w-4xl mx-auto p-6">
                 <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl p-8">
                     <div className="text-center mb-8">
-                        <h2 className="text-2xl font-semibold mb-4">Votre demande de réservation a été envoyée avec succès</h2>
-<p className="text-lg text-gray-600">
-    Vous recevrez un email de confirmation dès que votre demande aura été traitée.
-</p>
+                        <h2 className="text-2xl font-semibold mb-4">Votre demande de réservation a bien été envoyée</h2>
+                        <p className="text-lg text-gray-600">
+                            Nous vérifions la disponibilité et vous confirmons votre navette par email
+                            dans un délai de <span className="font-semibold text-spero">24 h, généralement bien plus vite</span>.
+                        </p>
+                        <p className="mt-2 text-sm text-gray-500">
+                            Un récapitulatif de votre demande vient de vous être envoyé par email.
+                        </p>
                     </div>
 
                     {booking && (
@@ -671,7 +550,7 @@ function Confirmation() {
                                     </div>
 
                                     {/* Résumé du trajet */}
-                                    <div className="col-span-2 bg-white shadow-sm rounded-lg border border-spero/20 p-4">
+                                    <div className="md:col-span-2 bg-white shadow-sm rounded-lg border border-spero/20 p-4">
                                         <div className="flex items-center gap-2 mb-4">
                                             <Calendar className="h-5 w-5 text-spero" />
                                             <h4 className="font-medium text-lg text-spero">Résumé du trajet</h4>
@@ -806,29 +685,45 @@ function Confirmation() {
                                 {renderPaymentMethod()}
                             </div>
                             
-                            {/* Comment nous avez-vous connu */}
-                            {(booking.isRoundTrip ? booking.outbound.recommendedBy : booking.recommendedBy) && (
-                                <div className="bg-white shadow-md p-6 rounded-lg border border-spero/10">
-                                    <h3 className="text-lg font-semibold mb-4 border-b pb-2">Comment nous avez-vous connu?</h3>
-                                    {renderReferralSource()}
-                                </div>
-                            )}
-
                             <div className="bg-blue-50 p-6 rounded-lg">
                                 <div className="flex items-start gap-3">
                                     <Clock className="h-5 w-5 text-spero flex-shrink-0 mt-0.5" />
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-2">Prochaines étapes</h3>
-                                        <p className="text-gray-600">
-                                            Nous vous enverrons un email de confirmation à <span className="font-medium">{email}</span> lorsque notre équipe aura examiné et validé votre demande.
+                                        <h3 className="text-lg font-semibold mb-3">Prochaines étapes</h3>
+                                        <ol className="space-y-2 text-gray-600 list-decimal pl-5">
+                                            <li>Nous vérifions la disponibilité de votre navette.</li>
+                                            <li>
+                                                Vous recevez la confirmation à <span className="font-medium">{email || client?.email}</span> dans
+                                                un délai de 24 h, généralement bien plus vite.
+                                            </li>
+                                            <li>Le jour J, votre chauffeur vient vous chercher à l'adresse indiquée.</li>
+                                        </ol>
+                                        <p className="mt-3 text-sm text-gray-500">
+                                            Pas d'email ? Pensez à vérifier vos courriers indésirables (spams).
                                         </p>
                                         <div className="mt-4 text-sm text-gray-600">
-                                            <p>Pour toute question, vous pouvez nous contacter :</p>
-                                            <p className="font-medium">Tél : 0490/19.79.14</p>
-                                            <p className="font-medium">Email : spero.navette@gmail.com</p>
+                                            <p>Une question ? Contactez-nous :</p>
+                                            <p className="font-medium">
+                                                Tél : <a href="tel:+32490197914" className="text-spero underline">0490 19 79 14</a>
+                                                <span className="font-normal text-gray-500"> (lun–ven 10h–19h, sam 10h–16h)</span>
+                                            </p>
+                                            <p className="font-medium">
+                                                Email : <a href="mailto:info@spero-navette.be" className="text-spero underline">info@spero-navette.be</a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="bg-white p-6 rounded-lg border border-gray-200 text-sm text-gray-600">
+                                <h3 className="text-base font-semibold text-gray-800 mb-2">Annulation et modification</h3>
+                                <ul className="space-y-1 list-disc pl-5">
+                                    <li>Annulation gratuite jusqu'à 12 h avant la prise en charge.</li>
+                                    <li>Moins de 12 h avant : 50 % du prix de la course, avec un minimum de 50 €.</li>
+                                    <li>Absence le jour J (no-show) : le prix complet de la navette est dû.</li>
+                                    <li>Modifications moins de 24 h avant le départ : selon disponibilités, non garanties.</li>
+                                </ul>
+                                <a href="/conditions-generales" className="inline-block mt-2 text-spero underline">Voir les conditions générales</a>
                             </div>
                         </div>
                     )}

@@ -628,7 +628,7 @@ function BookingForm() {
    <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
      <p className="text-sm text-blue-800">
        <strong>Note :</strong> Si vous avez besoin d'effectuer plusieurs arrêts ou si vous avez plusieurs adresses sur votre trajet, 
-       veuillez nous contacter à <span className="font-medium">spero.navette@gmail.com</span> pour recevoir un devis personnalisé.
+       veuillez nous contacter à <span className="font-medium">info@spero-navette.be</span> pour recevoir un devis personnalisé.
      </p>
    </div>
  </div>

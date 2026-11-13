@@ -27,16 +27,17 @@ const TermsAndConditions = () => {
               </ul>
               <p>1.3. Les factures doivent être réglées dans les 14 jours suivant leur émission. Tout retard de paiement entraînera des frais administratifs de 10% du montant total avec un minimum de 20€, ainsi que les intérêts légaux applicables.</p>
               <p>1.4. Pour toute demande de réservation moins de 24 heures avant votre prise en charge, veuillez appeler notre bureau au +32 490 197 914.</p>
-              <p>1.5. Nos prix sont doublés les 24/12, 25/12, 31/12 et 01/01.</p>
+              <p>1.5. Un supplément de 50 % s'applique du 24/12 à partir de 14h00 au 25/12 inclus, et du 31/12 à partir de 14h00 au 01/01 inclus.</p>
             </div>
           </section>
           
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-spero mb-4">Article 2 : Annulation et modification</h2>
             <div className="space-y-2 text-gray-700">
-              <p>2.1. En cas d'annulation moins de 12 heures avant la prise en charge, une indemnité de 50% du prix de la course sera facturée avec un minimum de 50€.</p>
+              <p>2.1. L'annulation est gratuite jusqu'à 12 heures avant la prise en charge. En cas d'annulation moins de 12 heures avant la prise en charge, une indemnité de 50% du prix de la course sera facturée avec un minimum de 50€.</p>
               <p>2.2. Les modifications de réservation doivent être communiquées dès que possible. Les modifications demandées moins de 24 heures avant le départ ne peuvent être garanties.</p>
               <p>2.3. Spero Navette se réserve le droit d'annuler un service en cas de force majeure, sans compensation autre que le remboursement du montant déjà payé.</p>
+              <p>2.4. En cas d'absence du client au lieu et à l'heure de prise en charge convenus (no-show), sans annulation préalable, le prix complet de la navette reste dû.</p>
             </div>
           </section>
           

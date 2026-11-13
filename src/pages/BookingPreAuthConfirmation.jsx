@@ -217,7 +217,7 @@ function BookingPreAuthConfirmation() {
                   Call +32 490 19 79 14
                 </a>
                 <a
-                  href={`mailto:spero.navette@gmail.com?subject=Booking Inquiry - ${bookingRef}&body=Hello,%0A%0AI have a question about my booking:%0A%0AReference: ${bookingRef}%0AAmount: ${amount}%0A%0AQuestion:%0A%0A`}
+                  href={`mailto:info@spero-navette.be?subject=Booking Inquiry - ${bookingRef}&body=Hello,%0A%0AI have a question about my booking:%0A%0AReference: ${bookingRef}%0AAmount: ${amount}%0A%0AQuestion:%0A%0A`}
                   className="flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors shadow-md"
                 >
                   <Mail className="w-4 h-4 mr-2" />

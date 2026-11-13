@@ -201,7 +201,7 @@ function BookingFormEN({ destinations }) {
     const selectedRoute = e.target.value;
     if (selectedRoute === 'other') {
       // Open email client when "Other destination" is selected
-      window.location.href = "mailto:spero.navette@gmail.com?subject=Inquiry about shuttle to custom destination&body=Hello,%0A%0AI would like to inquire about a shuttle service to a destination not listed on your website.%0A%0ADetails:%0A- Pickup date:%0A- Number of passengers:%0A- Destination:%0A- Special requests:%0A%0AThank you.";
+      window.location.href = "mailto:info@spero-navette.be?subject=Inquiry about shuttle to custom destination&body=Hello,%0A%0AI would like to inquire about a shuttle service to a destination not listed on your website.%0A%0ADetails:%0A- Pickup date:%0A- Number of passengers:%0A- Destination:%0A- Special requests:%0A%0AThank you.";
       return;
     }
     

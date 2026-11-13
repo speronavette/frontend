@@ -239,8 +239,8 @@ function BookingConfirmation() {
             <div className="flex items-center">
               <Mail className="h-5 w-5 text-spero mr-3" />
               <span className="text-gray-600 mr-2">Email :</span>
-              <a href="mailto:spero.navette@gmail.com" className="text-spero font-medium hover:underline">
-                spero.navette@gmail.com
+              <a href="mailto:info@spero-navette.be" className="text-spero font-medium hover:underline">
+                info@spero-navette.be
               </a>
             </div>
           </div>
