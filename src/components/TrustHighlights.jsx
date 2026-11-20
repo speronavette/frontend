@@ -20,12 +20,12 @@ export default function TrustHighlights({ className = '' }) {
     <div className={`max-w-3xl mx-auto ${className}`}>
       <div className="bg-white rounded-lg border-2 border-spero/20 shadow-md p-5 text-center">
         <p className="text-2xl md:text-3xl font-bold text-gray-800">
-          Zaventem dès <span className="text-spero whitespace-nowrap">{ZAVENTEM_FROM_PRICE} €</span>
+          Zaventem à partir de <span className="text-spero whitespace-nowrap">{isPromoActive() ? applyPromo(ZAVENTEM_FROM_PRICE) : ZAVENTEM_FROM_PRICE} €</span>
         </p>
         <p className="text-sm text-gray-500 mt-1">depuis votre domicile, navette partagée pour 1 à 2 personnes</p>
         {isPromoActive() && (
           <p className="text-xs text-green-700 mt-1">
-            {applyPromo(ZAVENTEM_FROM_PRICE)} € avec la promo -8 % pour toute navette jusqu'au 31/03/2027
+            Prix promo -8 % pour toute navette jusqu'au 31/03/2027 (hors promo : {ZAVENTEM_FROM_PRICE} €)
           </p>
         )}
 
