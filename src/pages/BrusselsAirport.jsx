@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { isPromoActive, applyPromo, promoNote } from '../data/promo';
+import { isPromoActive, applyPromo } from '../data/promo';
+
+// Prix « à partir de » : prix promo tant que la promo est en cours, sinon prix normal
+const fromPrice = (price) => (isPromoActive() ? applyPromo(price) : price);
+const promoSuffix = (price) => (isPromoActive() ? ` avec la promo -8 % pour toute navette jusqu'au 31/03/2027 (${price}€ hors promo)` : '');
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import TrustHighlights, { FeaturedReviews } from '../components/TrustHighlights';
@@ -61,7 +65,7 @@ const brusselsAirportFAQ = {
       "name": "Combien coûte une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de 108€ en navette partagée (1 à 2 personnes)${promoNote(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée).`
+        "text": `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(108)}€ en navette partagée (1 à 2 personnes)${promoSuffix(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée).`
       }
     },
     {
@@ -147,7 +151,7 @@ const BrusselsAirport = () => {
   const faqs = [
     {
       question: "Combien coûte une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi ?",
-      answer: `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de 108€ en navette partagée (1 à 2 personnes)${promoNote(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée). Utilisez notre calculateur en ligne pour obtenir un tarif précis depuis votre commune.`
+      answer: `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(108)}€ en navette partagée (1 à 2 personnes)${promoSuffix(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée). Utilisez notre calculateur en ligne pour obtenir un tarif précis depuis votre commune.`
     },
     {
       question: "Combien de temps faut-il pour aller de Charleroi à l'aéroport de Bruxelles-Zaventem ?",
@@ -239,8 +243,8 @@ const BrusselsAirport = () => {
   return (
     <>
       <SEO
-        title="Navette Aéroport Bruxelles-Zaventem depuis Charleroi | Dès 108€"
-        description="Navette vers l'aéroport de Bruxelles-Zaventem depuis le Hainaut. Trajet 50-70 min, service 24/7, dès 108€. Évitez le stress du parking et des transports."
+        title={`Navette Aéroport Bruxelles-Zaventem depuis Charleroi | Dès ${fromPrice(108)}€`}
+        description={`Navette vers l'aéroport de Bruxelles-Zaventem depuis le Hainaut. Trajet 50-70 min, service 24/7, dès ${fromPrice(108)}€. Évitez le stress du parking et des transports.`}
         keywords="navette bruxelles zaventem, transport zaventem charleroi, navette aéroport bruxelles, taxi zaventem hainaut, transfert bru airport"
         canonicalUrl="https://spero-navette.be/navette-aeroport-bruxelles-zaventem"
       >
@@ -382,9 +386,9 @@ const BrusselsAirport = () => {
                       <td className="p-3 font-medium">{trajet.ville}</td>
                       <td className="p-3 text-center text-gray-600">{trajet.distance}</td>
                       <td className="p-3 text-center font-bold text-spero">
-                        {trajet.tarif}
+                        à partir de {fromPrice(trajet.prix)}€
                         {isPromoActive() && (
-                          <span className="block text-xs font-normal text-green-700">promo : {applyPromo(trajet.prix)}€</span>
+                          <span className="block text-xs font-normal text-green-700">promo -8 % (hors promo : {trajet.prix}€)</span>
                         )}
                       </td>
                       <td className="p-3 text-center text-gray-600">{trajet.temps}</td>
