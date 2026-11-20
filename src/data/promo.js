@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // PROMO : -8 % sur toute navette dont la date est au plus tard le 31/03/2027
-// (prix arrondi à l'euro supérieur). Pour arrêter ou modifier la promo,
+// (prix arrondi à l'euro inférieur). Pour arrêter ou modifier la promo,
 // changer uniquement PROMO ci-dessous.
 // ---------------------------------------------------------------------------
 export const PROMO = {
@@ -25,11 +25,11 @@ export const isPromoDate = (date) => {
   return String(date).slice(0, 10) <= PROMO.endDate;
 };
 
-// Prix après remise, arrondi à l'euro supérieur
+// Prix après remise, arrondi à l'euro inférieur
 export const applyPromo = (price) => {
   if (!price) return 0;
   const discountedCents = Math.round(price * (1 - PROMO.rate) * 100);
-  return Math.ceil(discountedCents / 100);
+  return Math.floor(discountedCents / 100);
 };
 
 // Petite mention promo discrète à côté d'un prix "à partir de" (vide si la promo est terminée)
