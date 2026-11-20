@@ -4,6 +4,7 @@ import {
   GOOGLE_RATING, GOOGLE_REVIEW_COUNT, GOOGLE_MAPS_URL, ZAVENTEM_FROM_PRICE,
   PHONE_DISPLAY, WHATSAPP_LINK, FEATURED_REVIEWS
 } from '../data/business';
+import { isPromoActive, applyPromo } from '../data/promo';
 
 const Stars = () => (
   <span className="flex" aria-hidden="true">
@@ -22,6 +23,11 @@ export default function TrustHighlights({ className = '' }) {
           Zaventem dès <span className="text-spero whitespace-nowrap">{ZAVENTEM_FROM_PRICE} €</span>
         </p>
         <p className="text-sm text-gray-500 mt-1">depuis votre domicile, navette partagée pour 1 à 2 personnes</p>
+        {isPromoActive() && (
+          <p className="text-xs text-green-700 mt-1">
+            {applyPromo(ZAVENTEM_FROM_PRICE)} € avec la promo -8 % pour toute navette jusqu'au 31/03/2027
+          </p>
+        )}
 
         <p className="mt-3 inline-flex items-center gap-2 text-gray-700 font-medium">
           <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
