@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { calculatePrice, pricesDB } from '../data/prices';
+import { calculatePriceWithPromo, pricesDB, PROMO } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 import { isTransferDeadlinePassed } from '../utils/paymentDeadline';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -184,13 +184,13 @@ function BookingForm() {
  
    try {
      if (journeyType === 'outbound' && outboundJourney.airport) {
-       newPrice = calculatePrice(postalCode, outboundJourney.airport, Number(passengers));
+       newPrice = calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date);
      } else if (journeyType === 'inbound' && inboundJourney.airport) {
-       newPrice = calculatePrice(postalCode, inboundJourney.airport, Number(passengers));
+       newPrice = calculatePriceWithPromo(postalCode, inboundJourney.airport, Number(passengers), inboundJourney.date);
      } else if (journeyType === 'roundTrip') {
        if (outboundJourney.airport && inboundJourney.airport) {
-         const outPrice = calculatePrice(postalCode, outboundJourney.airport, Number(passengers));
-         const inPrice = calculatePrice(postalCode, inboundJourney.airport, Number(passengers));
+         const outPrice = calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date);
+         const inPrice = calculatePriceWithPromo(postalCode, inboundJourney.airport, Number(passengers), inboundJourney.date);
          
          if (outPrice.sharedPrice === 0 || inPrice.sharedPrice === 0) {
            setPrice({ sharedPrice: 0, privatePrice: 0 });
@@ -199,7 +199,8 @@ function BookingForm() {
          
          newPrice = {
            sharedPrice: outPrice.sharedPrice + inPrice.sharedPrice,
-           privatePrice: outPrice.privatePrice + inPrice.privatePrice
+           privatePrice: outPrice.privatePrice + inPrice.privatePrice,
+           promoApplied: outPrice.promoApplied || inPrice.promoApplied
          };
        }
      }
@@ -215,7 +216,7 @@ function BookingForm() {
 
  useEffect(() => {
    updatePrice();
- }, [personalInfo.postalCode, personalInfo.passengers, outboundJourney.airport, inboundJourney.airport, journeyType]);
+ }, [personalInfo.postalCode, personalInfo.passengers, outboundJourney.airport, inboundJourney.airport, outboundJourney.date, inboundJourney.date, journeyType]);
 
  const handlePostalCodeChange = (e) => {
    const code = e.target.value;
@@ -313,7 +314,7 @@ function BookingForm() {
              date: outboundJourney.date,
              time: outboundJourney.time,
              airport: outboundJourney.airport,
-             price: calculatePrice(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers))
+             price: calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date)
            },
            inbound: {
              date: inboundJourney.date,
@@ -321,7 +322,7 @@ function BookingForm() {
              airport: inboundJourney.airport,
              flightNumber: inboundJourney.flightNumber,
              flightOrigin: inboundJourney.flightOrigin,
-             price: calculatePrice(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers))
+             price: calculatePriceWithPromo(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers), inboundJourney.date)
            }
          },
          passengers: Number(personalInfo.passengers),
@@ -354,8 +355,8 @@ function BookingForm() {
        const data = await response.json();
 
        // Calcul des prix individuels pour l'affichage correct dans la page de confirmation
-       const outPrice = calculatePrice(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers));
-       const inPrice = calculatePrice(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers));
+       const outPrice = calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date);
+       const inPrice = calculatePriceWithPromo(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers), inboundJourney.date);
 
        // Navigation vers la confirmation avec les prix individuels
        navigate('/confirmation', {
@@ -855,11 +856,11 @@ function BookingForm() {
                          <div className="space-y-2 mb-4 text-gray-600">
                            <p>
                              Trajet aller {personalInfo.city} → {airports.find(a => a.code === outboundJourney.airport)?.nom}:
-                             <span className="font-bold text-black"> {calculatePrice(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers))?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
+                             <span className="font-bold text-black"> {calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date)?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
                            </p>
                            <p>
                              Trajet retour {airports.find(a => a.code === inboundJourney.airport)?.nom} → {personalInfo.city}:
-                             <span className="font-bold text-black"> {calculatePrice(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers))?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
+                             <span className="font-bold text-black"> {calculatePriceWithPromo(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers), inboundJourney.date)?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
                            </p>
                          </div>
                          <p className="text-3xl text-spero font-bold">
@@ -871,6 +872,9 @@ function BookingForm() {
                        <p className="text-3xl text-spero font-bold">
                          {serviceType === 'private' ? price.privatePrice : price.sharedPrice} €
                        </p>
+                     )}
+                     {price.promoApplied && (
+                       <p className="text-sm text-green-700 font-medium mt-2">🎉 {PROMO.label} — remise appliquée</p>
                      )}
                    </>
                  )}

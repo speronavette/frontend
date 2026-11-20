@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import TrustHighlights, { FeaturedReviews } from '../components/TrustHighlights';
-import { calculatePrice } from '../data/prices';
+import { calculatePrice, isPromoActive } from '../data/prices';
 import { postalCodesDB } from '../data/postalCodes';
 
 // ========== ICÔNES SVG OPTIMISÉES (au lieu d'importer toute la lib Lucide) ==========
@@ -269,6 +269,13 @@ function Home() {
 
         {/* ========== CALCULATEUR DE PRIX (votre outil central) ========== */}
         <section id="calculator" className="max-w-md mx-auto mb-16 scroll-mt-24">
+          {/* Bandeau promo : disparaît automatiquement après la fin de la promo */}
+          {isPromoActive() && (
+            <div className="mb-4 rounded-lg bg-green-600 text-white text-center px-4 py-3 shadow-md">
+              <p className="text-lg font-bold">🎉 -8 % sur votre navette</p>
+              <p className="text-sm">Pour toute navette jusqu'au 31 mars 2027 — remise appliquée automatiquement</p>
+            </div>
+          )}
           <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl">
             <div className="p-8">
               <h2 className="text-2xl font-semibold text-center mb-6">

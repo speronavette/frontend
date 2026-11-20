@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { PROMO, isPromoActive, applyPromo } from '../data/prices';
 
 // Importez la liste des aéroports
 const airports = [
@@ -19,6 +20,8 @@ function CalculationResult() {
   const navigate = useNavigate();
   const { passengers, postalCode, commune, destination, prices, noPriceFound } = location.state || {};
   const { sharedPrice, privatePrice } = prices || { sharedPrice: 0, privatePrice: 0 };
+  const promo = isPromoActive();
+  const promoSharedPrice = applyPromo(sharedPrice);
 
   // Si aucun prix n'est trouvé
   if (noPriceFound) {
@@ -73,15 +76,28 @@ function CalculationResult() {
           </p>
         </div>
 
+        {promo && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-3 text-center text-green-800 font-semibold">
+            🎉 {PROMO.label}
+          </div>
+        )}
+
         <div className="space-y-6">
           {/* Trajet simple */}
           <div className="bg-gray-50 p-6 rounded-lg border-2 border-spero/20">
             <h3 className="text-xl font-semibold text-center mb-4">Trajet simple</h3>
             
             <div className="text-center">
-              <p className="text-4xl text-spero font-bold mb-3">
-                {sharedPrice.toFixed(0)} €
-              </p>
+              {promo ? (
+                <>
+                  <p className="text-xl text-gray-400 line-through">{sharedPrice.toFixed(0)} €</p>
+                  <p className="text-4xl text-spero font-bold mb-3">{promoSharedPrice} €</p>
+                </>
+              ) : (
+                <p className="text-4xl text-spero font-bold mb-3">
+                  {sharedPrice.toFixed(0)} €
+                </p>
+              )}
             </div>
           </div>
 
@@ -99,9 +115,16 @@ function CalculationResult() {
             <h3 className="text-xl font-semibold text-center mb-4">Aller-retour</h3>
             
             <div className="text-center">
-              <p className="text-4xl text-spero font-bold mb-3">
-                {(sharedPrice * 2).toFixed(0)} €
-              </p>
+              {promo ? (
+                <>
+                  <p className="text-xl text-gray-400 line-through">{(sharedPrice * 2).toFixed(0)} €</p>
+                  <p className="text-4xl text-spero font-bold mb-3">{promoSharedPrice * 2} €</p>
+                </>
+              ) : (
+                <p className="text-4xl text-spero font-bold mb-3">
+                  {(sharedPrice * 2).toFixed(0)} €
+                </p>
+              )}
             </div>
           </div>
         </div>
