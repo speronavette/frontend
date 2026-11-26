@@ -751,6 +751,42 @@ function BookingForm() {
                      </select>
                    </div>
                  </div>
+                 <div className="mt-4 p-4 border-2 border-spero/30 rounded-lg bg-spero/5">
+                   <h3 className="font-semibold mb-2">Option payante</h3>
+                   <div className="flex items-start gap-3">
+                     <input
+                       type="checkbox"
+                       id="assistance"
+                       checked={assistance}
+                       onChange={(e) => { setAssistance(e.target.checked); if (!e.target.checked) setAssistanceType(''); }}
+                       className="mt-1 h-5 w-5"
+                     />
+                     <label htmlFor="assistance">
+                       <span className="font-medium">Assistance à l'aéroport (+{ASSISTANCE_PRICE} €)</span>
+                       <span className="block text-sm text-gray-600">Le chauffeur vous accompagne dans l'aéroport.</span>
+                     </label>
+                   </div>
+                   {assistance && (
+                     <fieldset className="mt-3 ml-8 space-y-2">
+                       <legend className="text-sm font-medium mb-1">Type d'accompagnement (obligatoire)</legend>
+                       {ASSISTANCE_TYPES.map((t) => (
+                         <div key={t.value} className="flex items-center gap-2">
+                           <input
+                             type="radio"
+                             id={`assistance-${t.value}`}
+                             name="assistanceType"
+                             value={t.value}
+                             checked={assistanceType === t.value}
+                             onChange={(e) => setAssistanceType(e.target.value)}
+                             required
+                             className="h-4 w-4"
+                           />
+                           <label htmlFor={`assistance-${t.value}`}>{t.label}</label>
+                         </div>
+                       ))}
+                     </fieldset>
+                   )}
+                 </div>
                </div>
              )}
 
@@ -971,44 +1007,6 @@ function BookingForm() {
              </div>
            </div>
 
-           {journeyType !== 'inbound' && (
-             <div className="mt-6 p-4 border-2 border-spero/30 rounded-lg bg-spero/5">
-               <h3 className="font-semibold mb-2">Option payante</h3>
-               <div className="flex items-start gap-3">
-                 <input
-                   type="checkbox"
-                   id="assistance"
-                   checked={assistance}
-                   onChange={(e) => { setAssistance(e.target.checked); if (!e.target.checked) setAssistanceType(''); }}
-                   className="mt-1 h-5 w-5"
-                 />
-                 <label htmlFor="assistance">
-                   <span className="font-medium">Assistance à l'aéroport (+{ASSISTANCE_PRICE} €)</span>
-                   <span className="block text-sm text-gray-600">Le chauffeur vous accompagne dans l'aéroport. Uniquement pour le trajet de départ vers l'aéroport.</span>
-                 </label>
-               </div>
-               {assistance && (
-                 <fieldset className="mt-3 ml-8 space-y-2">
-                   <legend className="text-sm font-medium mb-1">Type d'accompagnement (obligatoire)</legend>
-                   {ASSISTANCE_TYPES.map((t) => (
-                     <div key={t.value} className="flex items-center gap-2">
-                       <input
-                         type="radio"
-                         id={`assistance-${t.value}`}
-                         name="assistanceType"
-                         value={t.value}
-                         checked={assistanceType === t.value}
-                         onChange={(e) => setAssistanceType(e.target.value)}
-                         required
-                         className="h-4 w-4"
-                       />
-                       <label htmlFor={`assistance-${t.value}`}>{t.label}</label>
-                     </div>
-                   ))}
-                 </fieldset>
-               )}
-             </div>
-           )}
          </section>
 
          {/* Section 5: Informations complémentaires */}
