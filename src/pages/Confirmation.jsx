@@ -666,7 +666,7 @@ function Confirmation() {
                                                 ? (booking.outbound.options?.boosterSeatsCount || 0)
                                                 : (booking.options?.boosterSeatsCount || 0)}</li>
                                             {(booking.isRoundTrip ? booking.outbound.options?.assistance : booking.options?.assistance) && (
-                                                <li className="font-medium">Assistance à l'aéroport au départ (+10 €, incluse dans le prix)</li>
+                                                <li className="font-medium">Assistance à l'aéroport au départ{({ checkin: ' : accompagnement au check-in', assistanceDesk: " : accompagnement au comptoir d'assistance" })[booking.isRoundTrip ? booking.outbound.options?.assistanceType : booking.options?.assistanceType] || ''} (+10 €, incluse dans le prix)</li>
                                             )}
                                         </ul>
                                     </div>

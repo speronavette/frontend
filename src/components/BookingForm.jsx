@@ -116,6 +116,11 @@ function BookingForm() {
  // Option payante : assistance à l'aéroport (check-in / comptoir d'assistance), uniquement au départ
  const ASSISTANCE_PRICE = 10;
  const [assistance, setAssistance] = useState(false);
+ const [assistanceType, setAssistanceType] = useState('');
+ const ASSISTANCE_TYPES = [
+   { value: 'checkin', label: 'Accompagnement au check-in' },
+   { value: 'assistanceDesk', label: "Accompagnement au comptoir d'assistance" }
+ ];
  const withAssistance = (p) => (assistance && p?.sharedPrice
    ? { ...p, sharedPrice: p.sharedPrice + ASSISTANCE_PRICE, privatePrice: p.privatePrice + ASSISTANCE_PRICE }
    : p);
@@ -343,7 +348,7 @@ function BookingForm() {
            sharedPrice: price.sharedPrice,
            privatePrice: price.privatePrice
          },
-         options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance },
+         options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance, assistanceType: journeyType !== 'inbound' && assistance ? assistanceType : '' },
          recommendedBy: additionalInfo.recommendedBy,
          agencyName: additionalInfo.recommendedBy === 'agency' ? additionalInfo.agencyName : '',
          paymentMethod: additionalInfo.paymentMethod,
@@ -434,7 +439,7 @@ function BookingForm() {
             sharedPrice: price.sharedPrice,
             privatePrice: price.privatePrice
           },
-          options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance },
+          options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance, assistanceType: journeyType !== 'inbound' && assistance ? assistanceType : '' },
           recommendedBy: additionalInfo.recommendedBy,
           agencyName: additionalInfo.recommendedBy === 'agency' ? additionalInfo.agencyName : '',
           paymentMethod: additionalInfo.paymentMethod,
@@ -886,7 +891,7 @@ function BookingForm() {
                        </p>
                      )}
                      {assistance && journeyType !== 'inbound' && (
-                       <p className="text-sm text-gray-600 mt-1">Dont assistance à l'aéroport au départ : {ASSISTANCE_PRICE} €</p>
+                       <p className="text-sm text-gray-600 mt-1">Dont assistance à l'aéroport au départ{assistanceType ? ` (${ASSISTANCE_TYPES.find(t => t.value === assistanceType)?.label.toLowerCase()})` : ''} : {ASSISTANCE_PRICE} €</p>
                      )}
                      {price.promoApplied && (
                        <p className="text-sm text-green-700 font-medium mt-2">🎉 {PROMO.label} — remise appliquée</p>
@@ -974,14 +979,34 @@ function BookingForm() {
                    type="checkbox"
                    id="assistance"
                    checked={assistance}
-                   onChange={(e) => setAssistance(e.target.checked)}
+                   onChange={(e) => { setAssistance(e.target.checked); if (!e.target.checked) setAssistanceType(''); }}
                    className="mt-1 h-5 w-5"
                  />
                  <label htmlFor="assistance">
                    <span className="font-medium">Assistance à l'aéroport (+{ASSISTANCE_PRICE} €)</span>
-                   <span className="block text-sm text-gray-600">Le chauffeur vous accompagne jusqu'au check-in ou au comptoir d'assistance. Uniquement pour le trajet de départ vers l'aéroport.</span>
+                   <span className="block text-sm text-gray-600">Le chauffeur vous accompagne dans l'aéroport. Uniquement pour le trajet de départ vers l'aéroport.</span>
                  </label>
                </div>
+               {assistance && (
+                 <fieldset className="mt-3 ml-8 space-y-2">
+                   <legend className="text-sm font-medium mb-1">Type d'accompagnement (obligatoire)</legend>
+                   {ASSISTANCE_TYPES.map((t) => (
+                     <div key={t.value} className="flex items-center gap-2">
+                       <input
+                         type="radio"
+                         id={`assistance-${t.value}`}
+                         name="assistanceType"
+                         value={t.value}
+                         checked={assistanceType === t.value}
+                         onChange={(e) => setAssistanceType(e.target.value)}
+                         required
+                         className="h-4 w-4"
+                       />
+                       <label htmlFor={`assistance-${t.value}`}>{t.label}</label>
+                     </div>
+                   ))}
+                 </fieldset>
+               )}
              </div>
            )}
          </section>
