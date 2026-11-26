@@ -65,7 +65,7 @@ const brusselsAirportFAQ = {
       "name": "Combien coûte une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(108)}€ en navette partagée (1 à 2 personnes)${promoSuffix(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée).`
+        "text": `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(106)}€ en navette partagée (1 à 2 personnes)${promoSuffix(106)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée).`
       }
     },
     {
@@ -151,7 +151,7 @@ const BrusselsAirport = () => {
   const faqs = [
     {
       question: "Combien coûte une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi ?",
-      answer: `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(108)}€ en navette partagée (1 à 2 personnes)${promoSuffix(108)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée). Utilisez notre calculateur en ligne pour obtenir un tarif précis depuis votre commune.`
+      answer: `Le prix d'une navette vers l'aéroport de Bruxelles-Zaventem depuis Charleroi commence à partir de ${fromPrice(106)}€ en navette partagée (1 à 2 personnes)${promoSuffix(106)}. Le tarif varie en fonction du nombre de personnes et du type de service (navette partagée ou privée). Utilisez notre calculateur en ligne pour obtenir un tarif précis depuis votre commune.`
     },
     {
       question: "Combien de temps faut-il pour aller de Charleroi à l'aéroport de Bruxelles-Zaventem ?",
@@ -230,21 +230,21 @@ const BrusselsAirport = () => {
   ];
 
   const trajets = [
-    { ville: "Charleroi", distance: "75 km", prix: 108, tarif: "à partir de 108€", temps: "50-70 min" },
-    { ville: "Nivelles", distance: "50 km", prix: 108, tarif: "à partir de 108€", temps: "45-60 min" },
-    { ville: "Chapelle-lez-Herlaimont", distance: "50 km", prix: 108, tarif: "à partir de 108€", temps: "50-65 min" },
-    { ville: "Sambreville", distance: "75 km", prix: 114, tarif: "à partir de 114€", temps: "55-75 min" },
-    { ville: "La Louvière", distance: "65 km", prix: 111, tarif: "à partir de 111€", temps: "50-65 min" },
-    { ville: "Thuin", distance: "85 km", prix: 117, tarif: "à partir de 117€", temps: "60-75 min" },
-    { ville: "Chimay", distance: "115 km", prix: 169, tarif: "à partir de 169€", temps: "100-120 min" },
-    { ville: "Couvin", distance: "110 km", prix: 156, tarif: "à partir de 156€", temps: "95-115 min" }
+    { ville: "Charleroi", distance: "75 km", prix: 106, tarif: "à partir de 106€", temps: "50-70 min" },
+    { ville: "Nivelles", distance: "50 km", prix: 106, tarif: "à partir de 106€", temps: "45-60 min" },
+    { ville: "Chapelle-lez-Herlaimont", distance: "50 km", prix: 106, tarif: "à partir de 106€", temps: "50-65 min" },
+    { ville: "Sambreville", distance: "75 km", prix: 113, tarif: "à partir de 113€", temps: "55-75 min" },
+    { ville: "La Louvière", distance: "65 km", prix: 110, tarif: "à partir de 110€", temps: "50-65 min" },
+    { ville: "Thuin", distance: "85 km", prix: 116, tarif: "à partir de 116€", temps: "60-75 min" },
+    { ville: "Chimay", distance: "115 km", prix: 168, tarif: "à partir de 168€", temps: "100-120 min" },
+    { ville: "Couvin", distance: "110 km", prix: 154, tarif: "à partir de 154€", temps: "95-115 min" }
   ];
 
   return (
     <>
       <SEO
-        title={`Navette Aéroport Bruxelles-Zaventem depuis Charleroi | Dès ${fromPrice(108)}€`}
-        description={`Navette vers l'aéroport de Bruxelles-Zaventem depuis le Hainaut. Trajet 50-70 min, service 24/7, dès ${fromPrice(108)}€. Évitez le stress du parking et des transports.`}
+        title={`Navette Aéroport Bruxelles-Zaventem depuis Charleroi | Dès ${fromPrice(106)}€`}
+        description={`Navette vers l'aéroport de Bruxelles-Zaventem depuis le Hainaut. Trajet 50-70 min, service 24/7, dès ${fromPrice(106)}€. Évitez le stress du parking et des transports.`}
         keywords="navette bruxelles zaventem, transport zaventem charleroi, navette aéroport bruxelles, taxi zaventem hainaut, transfert bru airport"
         canonicalUrl="https://spero-navette.be/navette-aeroport-bruxelles-zaventem"
       >

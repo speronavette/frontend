@@ -3,7 +3,7 @@ export const GOOGLE_RATING = '4,9';
 export const GOOGLE_REVIEW_COUNT = 389;
 export const GOOGLE_MAPS_URL = 'https://g.page/r/CQTXwFtumGyuEBM';
 
-export const ZAVENTEM_FROM_PRICE = 108;
+export const ZAVENTEM_FROM_PRICE = 106;
 
 export const PHONE_DISPLAY = '0490 19 79 14';
 export const PHONE_LINK = 'tel:+32490197914';
