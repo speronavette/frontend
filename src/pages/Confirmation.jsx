@@ -665,6 +665,9 @@ function Confirmation() {
                                             <li>Réhausseurs: {booking.isRoundTrip
                                                 ? (booking.outbound.options?.boosterSeatsCount || 0)
                                                 : (booking.options?.boosterSeatsCount || 0)}</li>
+                                            {(booking.isRoundTrip ? booking.outbound.options?.assistance : booking.options?.assistance) && (
+                                                <li className="font-medium">Assistance à l'aéroport au départ (+10 €, incluse dans le prix)</li>
+                                            )}
                                         </ul>
                                     </div>
 

@@ -113,6 +113,13 @@ function BookingForm() {
    airport: formData.destination?.code || ''
  });
 
+ // Option payante : assistance à l'aéroport (check-in / comptoir d'assistance), uniquement au départ
+ const ASSISTANCE_PRICE = 10;
+ const [assistance, setAssistance] = useState(false);
+ const withAssistance = (p) => (assistance && p?.sharedPrice
+   ? { ...p, sharedPrice: p.sharedPrice + ASSISTANCE_PRICE, privatePrice: p.privatePrice + ASSISTANCE_PRICE }
+   : p);
+
  const [freeOptions, setFreeOptions] = useState({
    luggageCount: 0,
    handLuggageCount: 0,
@@ -184,12 +191,12 @@ function BookingForm() {
  
    try {
      if (journeyType === 'outbound' && outboundJourney.airport) {
-       newPrice = calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date);
+       newPrice = withAssistance(calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date));
      } else if (journeyType === 'inbound' && inboundJourney.airport) {
        newPrice = calculatePriceWithPromo(postalCode, inboundJourney.airport, Number(passengers), inboundJourney.date);
      } else if (journeyType === 'roundTrip') {
        if (outboundJourney.airport && inboundJourney.airport) {
-         const outPrice = calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date);
+         const outPrice = withAssistance(calculatePriceWithPromo(postalCode, outboundJourney.airport, Number(passengers), outboundJourney.date));
          const inPrice = calculatePriceWithPromo(postalCode, inboundJourney.airport, Number(passengers), inboundJourney.date);
          
          if (outPrice.sharedPrice === 0 || inPrice.sharedPrice === 0) {
@@ -216,7 +223,12 @@ function BookingForm() {
 
  useEffect(() => {
    updatePrice();
- }, [personalInfo.postalCode, personalInfo.passengers, outboundJourney.airport, inboundJourney.airport, outboundJourney.date, inboundJourney.date, journeyType]);
+ }, [personalInfo.postalCode, personalInfo.passengers, outboundJourney.airport, inboundJourney.airport, outboundJourney.date, inboundJourney.date, journeyType, assistance]);
+
+ // Pas d'assistance possible sans trajet de départ
+ useEffect(() => {
+   if (journeyType === 'inbound' && assistance) setAssistance(false);
+ }, [journeyType, assistance]);
 
  const handlePostalCodeChange = (e) => {
    const code = e.target.value;
@@ -314,7 +326,7 @@ function BookingForm() {
              date: outboundJourney.date,
              time: outboundJourney.time,
              airport: outboundJourney.airport,
-             price: calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date)
+             price: withAssistance(calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date))
            },
            inbound: {
              date: inboundJourney.date,
@@ -331,7 +343,7 @@ function BookingForm() {
            sharedPrice: price.sharedPrice,
            privatePrice: price.privatePrice
          },
-         options: freeOptions,
+         options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance },
          recommendedBy: additionalInfo.recommendedBy,
          agencyName: additionalInfo.recommendedBy === 'agency' ? additionalInfo.agencyName : '',
          paymentMethod: additionalInfo.paymentMethod,
@@ -355,7 +367,7 @@ function BookingForm() {
        const data = await response.json();
 
        // Calcul des prix individuels pour l'affichage correct dans la page de confirmation
-       const outPrice = calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date);
+       const outPrice = withAssistance(calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date));
        const inPrice = calculatePriceWithPromo(personalInfo.postalCode, inboundJourney.airport, Number(personalInfo.passengers), inboundJourney.date);
 
        // Navigation vers la confirmation avec les prix individuels
@@ -422,7 +434,7 @@ function BookingForm() {
             sharedPrice: price.sharedPrice,
             privatePrice: price.privatePrice
           },
-          options: freeOptions,
+          options: { ...freeOptions, assistance: journeyType !== 'inbound' && assistance },
           recommendedBy: additionalInfo.recommendedBy,
           agencyName: additionalInfo.recommendedBy === 'agency' ? additionalInfo.agencyName : '',
           paymentMethod: additionalInfo.paymentMethod,
@@ -856,7 +868,7 @@ function BookingForm() {
                          <div className="space-y-2 mb-4 text-gray-600">
                            <p>
                              Trajet aller {personalInfo.city} → {airports.find(a => a.code === outboundJourney.airport)?.nom}:
-                             <span className="font-bold text-black"> {calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date)?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
+                             <span className="font-bold text-black"> {withAssistance(calculatePriceWithPromo(personalInfo.postalCode, outboundJourney.airport, Number(personalInfo.passengers), outboundJourney.date))?.[serviceType === 'private' ? 'privatePrice' : 'sharedPrice']} €</span>
                            </p>
                            <p>
                              Trajet retour {airports.find(a => a.code === inboundJourney.airport)?.nom} → {personalInfo.city}:
@@ -872,6 +884,9 @@ function BookingForm() {
                        <p className="text-3xl text-spero font-bold">
                          {serviceType === 'private' ? price.privatePrice : price.sharedPrice} €
                        </p>
+                     )}
+                     {assistance && journeyType !== 'inbound' && (
+                       <p className="text-sm text-gray-600 mt-1">Dont assistance à l'aéroport au départ : {ASSISTANCE_PRICE} €</p>
                      )}
                      {price.promoApplied && (
                        <p className="text-sm text-green-700 font-medium mt-2">🎉 {PROMO.label} — remise appliquée</p>
@@ -950,6 +965,25 @@ function BookingForm() {
                />
              </div>
            </div>
+
+           {journeyType !== 'inbound' && (
+             <div className="mt-6 p-4 border-2 border-spero/30 rounded-lg bg-spero/5">
+               <h3 className="font-semibold mb-2">Option payante</h3>
+               <div className="flex items-start gap-3">
+                 <input
+                   type="checkbox"
+                   id="assistance"
+                   checked={assistance}
+                   onChange={(e) => setAssistance(e.target.checked)}
+                   className="mt-1 h-5 w-5"
+                 />
+                 <label htmlFor="assistance">
+                   <span className="font-medium">Assistance à l'aéroport (+{ASSISTANCE_PRICE} €)</span>
+                   <span className="block text-sm text-gray-600">Le chauffeur vous accompagne jusqu'au check-in ou au comptoir d'assistance. Uniquement pour le trajet de départ vers l'aéroport.</span>
+                 </label>
+               </div>
+             </div>
+           )}
          </section>
 
          {/* Section 5: Informations complémentaires */}
