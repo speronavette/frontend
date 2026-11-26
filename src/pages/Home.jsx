@@ -272,7 +272,7 @@ function Home() {
           {/* Bandeau promo : disparaît automatiquement après la fin de la promo */}
           {isPromoActive() && (
             <div className="mb-4 rounded-lg bg-green-600 text-white text-center px-4 py-3 shadow-md">
-              <p className="text-lg font-bold">🎉 -8 % sur votre navette</p>
+              <p className="text-lg font-bold">Prix promo sur votre navette</p>
               <p className="text-sm">Pour toute navette jusqu'au 31 mars 2027 — remise appliquée automatiquement</p>
             </div>
           )}

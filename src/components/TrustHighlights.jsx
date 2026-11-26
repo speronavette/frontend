@@ -25,7 +25,7 @@ export default function TrustHighlights({ className = '' }) {
         <p className="text-sm text-gray-500 mt-1">depuis votre domicile, navette partagée pour 1 à 2 personnes</p>
         {isPromoActive() && (
           <p className="text-xs text-green-700 mt-1">
-            Prix promo -8 % pour toute navette jusqu'au 31/03/2027 (hors promo : {ZAVENTEM_FROM_PRICE} €)
+            Prix promo pour toute navette jusqu'au 31/03/2027 (hors promo : {ZAVENTEM_FROM_PRICE} €)
           </p>
         )}
 

@@ -3,7 +3,7 @@ import { isPromoActive, applyPromo } from '../data/promo';
 
 // Prix « à partir de » : prix promo tant que la promo est en cours, sinon prix normal
 const fromPrice = (price) => (isPromoActive() ? applyPromo(price) : price);
-const promoSuffix = (price) => (isPromoActive() ? ` avec la promo -8 % pour toute navette jusqu'au 31/03/2027 (${price}€ hors promo)` : '');
+const promoSuffix = (price) => (isPromoActive() ? ` en prix promo pour toute navette jusqu'au 31/03/2027 (${price}€ hors promo)` : '');
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import TrustHighlights, { FeaturedReviews } from '../components/TrustHighlights';
@@ -388,7 +388,7 @@ const BrusselsAirport = () => {
                       <td className="p-3 text-center font-bold text-spero">
                         à partir de {fromPrice(trajet.prix)}€
                         {isPromoActive() && (
-                          <span className="block text-xs font-normal text-green-700">promo -8 % (hors promo : {trajet.prix}€)</span>
+                          <span className="block text-xs font-normal text-green-700">prix promo (hors promo : {trajet.prix}€)</span>
                         )}
                       </td>
                       <td className="p-3 text-center text-gray-600">{trajet.temps}</td>

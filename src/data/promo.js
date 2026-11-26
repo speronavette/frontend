@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------------
-// PROMO : -8 % sur toute navette dont la date est au plus tard le 31/03/2027
+// PROMO : prix promo (-6,6 %) sur toute navette dont la date est au plus tard le 31/03/2027
+// (106 € → 99 € pour Zaventem). Le pourcentage n'est pas affiché sur le site.
 // (prix arrondi à l'euro inférieur). Pour arrêter ou modifier la promo,
 // changer uniquement PROMO ci-dessous.
 // ---------------------------------------------------------------------------
 export const PROMO = {
-  rate: 0.08,
+  rate: 0.066,
   endDate: '2027-03-31', // date de la navette (incluse)
-  label: "Promo -8 % pour toute navette jusqu'au 31/03/2027"
+  label: "Prix promo pour toute navette jusqu'au 31/03/2027"
 };
 
 const todayKey = () => {
@@ -34,4 +35,4 @@ export const applyPromo = (price) => {
 
 // Petite mention promo discrète à côté d'un prix "à partir de" (vide si la promo est terminée)
 export const promoNote = (price) =>
-  isPromoActive() ? ` (${applyPromo(price)} € avec la promo -8 % pour toute navette jusqu'au 31/03/2027)` : '';
+  isPromoActive() ? ` (${applyPromo(price)} € en prix promo pour toute navette jusqu'au 31/03/2027)` : '';
