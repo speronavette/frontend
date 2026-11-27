@@ -273,7 +273,7 @@ function Home() {
           {isPromoActive() && (
             <div className="mb-4 rounded-lg bg-green-600 text-white text-center px-4 py-3 shadow-md">
               <p className="text-lg font-bold">Prix promo sur votre navette</p>
-              <p className="text-sm">Pour toute navette jusqu'au 31 mars 2027 — remise appliquée automatiquement</p>
+              <p className="text-sm">Pour toute navette jusqu'au 31 mars 2027 réservée à partir du 26 novembre 2026 — remise appliquée automatiquement</p>
             </div>
           )}
           <div className="bg-white rounded-lg border-2 border-spero/20 shadow-xl">

@@ -3,7 +3,7 @@ import { isPromoActive, applyPromo } from '../data/promo';
 
 // Prix « à partir de » : prix promo tant que la promo est en cours, sinon prix normal
 const fromPrice = (price) => (isPromoActive() ? applyPromo(price) : price);
-const promoSuffix = (price) => (isPromoActive() ? ` en prix promo pour toute navette jusqu'au 31/03/2027 (${price}€ hors promo)` : '');
+const promoSuffix = (price) => (isPromoActive() ? ` en prix promo pour toute navette jusqu'au 31/03/2027 réservée à partir du 26/11/2026 (${price}€ hors promo)` : '');
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import TrustHighlights, { FeaturedReviews } from '../components/TrustHighlights';
