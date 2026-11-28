@@ -9,7 +9,7 @@ import { WhyUs, PriceTable, Cancellation, Faq, faqJsonLd } from './EnShared';
 const EnHome = () => (
   <>
     <SEO
-      title="Charleroi Airport Private Transfers to Brussels, Bruges, Ghent, Antwerp, Namur"
+      title="Charleroi Airport Private Transfers"
       description="Private transfer from Charleroi Airport (CRL) to Brussels, Bruges, Ghent, Antwerp and Namur. Fixed price per vehicle, driver waiting with your name, no night surcharge. Book and pay online."
       keywords="Charleroi airport transfer, Charleroi airport to Brussels, Charleroi airport to Bruges, Charleroi airport taxi, private transfer Belgium"
       canonicalUrl="https://spero-navette.be/en"

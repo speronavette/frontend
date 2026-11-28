@@ -16,7 +16,7 @@ const EnDestination = () => {
   return (
     <>
       <SEO
-        title={`Charleroi Airport to ${d.name} Private Transfer from €${d.small}`}
+        title={`Charleroi Airport to ${d.name} Transfer from €${d.small}`}
         description={`Private transfer from Charleroi Airport (CRL) to ${d.name}: €${d.small} for 1–4 passengers, €${d.large} for 5–8, per vehicle. Driver waiting with your name, ${d.travelTime}. Book and pay online.`}
         keywords={`Charleroi airport to ${d.name}, Charleroi airport ${d.name} transfer, taxi Charleroi airport ${d.name}, CRL ${d.name}`}
         canonicalUrl={url}
