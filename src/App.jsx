@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Toaster } from "./components/ui/toaster";
 import { HelmetProvider } from 'react-helmet-async';
 import { EN_LIVE } from './data/enTransfers';
+import { CITY_PAGES } from './data/cityPages';
 
 // Imports directs pour les pages critiques (pas de lazy loading)
 import Home from './pages/Home';
@@ -21,6 +22,7 @@ const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const Avis = lazy(() => import('./pages/Avis'));
 const EnHome = lazy(() => import('./pages/en/EnHome'));
+const CityPage = lazy(() => import('./pages/CityPage'));
 const EnDestination = lazy(() => import('./pages/en/EnDestination'));
 const EnBookingConfirmed = lazy(() => import('./pages/en/EnBookingConfirmed'));
 
@@ -157,6 +159,12 @@ const Footer = memo(() => (
         <Link to="/blog" className="block hover:text-opacity-80">Blog</Link>
         <Link to="/faq" className="block hover:text-opacity-80">FAQ</Link>
         <div className="mt-4">
+          <h4 className="font-medium mb-1">Navette aéroport depuis</h4>
+          <ul className="text-sm mb-3">
+            {CITY_PAGES.map((c) => (
+              <li key={c.slug}><Link to={`/navette-aeroport-depuis-${c.slug}`} className="hover:underline">{c.name}</Link></li>
+            ))}
+          </ul>
           <h4 className="font-medium mb-1">Aéroports desservis</h4>
           <ul className="text-sm">
             <li>Aéroport de Bruxelles-Zaventem</li>
@@ -266,6 +274,11 @@ function App() {
               {/* Routes blog (faible priorité) */}
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:postId" element={<BlogPost />} />
+
+              {/* Pages « Navette aéroport depuis <commune> » */}
+              {CITY_PAGES.map((c) => (
+                <Route key={c.slug} path={`/navette-aeroport-depuis-${c.slug}`} element={<CityPage slug={c.slug} />} />
+              ))}
 
               {/* Pages anglaises : transferts depuis l'aéroport de Charleroi */}
               <Route path="/en" element={<EnHome />} />
