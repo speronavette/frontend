@@ -190,8 +190,8 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
           <input id="time" type="time" name="time" value={form.time} onChange={set} required className={field} />
         </div>
         <div className="sm:col-span-2">
-          <label htmlFor="flightNumber" className={label}>Flight number</label>
-          <input id="flightNumber" name="flightNumber" value={form.flightNumber} onChange={set} required maxLength={10} placeholder="e.g. FR1234" className={field} />
+          <label htmlFor="flightNumber" className={label}>{fromAirport ? 'Flight number' : 'Flight number (optional)'}</label>
+          <input id="flightNumber" name="flightNumber" value={form.flightNumber} onChange={set} required={fromAirport} maxLength={10} placeholder="e.g. FR1234" className={field} />
         </div>
       </div>
 
@@ -207,8 +207,8 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
             <input id="returnTime" type="time" name="returnTime" value={form.returnTime} onChange={set} required className={field} />
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="returnFlightNumber" className={label}>Departure flight number</label>
-            <input id="returnFlightNumber" name="returnFlightNumber" value={form.returnFlightNumber} onChange={set} required maxLength={10} placeholder="e.g. FR5678" className={field} />
+            <label htmlFor="returnFlightNumber" className={label}>Departure flight number (optional)</label>
+            <input id="returnFlightNumber" name="returnFlightNumber" value={form.returnFlightNumber} onChange={set} maxLength={10} placeholder="e.g. FR5678" className={field} />
           </div>
         </fieldset>
       )}
