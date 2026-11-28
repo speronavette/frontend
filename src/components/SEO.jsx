@@ -22,6 +22,7 @@ const SEO = ({
   ogType = "website",
   ogImage = "/images/logo-og.jpg", // Image par défaut pour les partages sociaux
   isEnglish = false,
+  alternates = null, // { fr: url, en: url } pour les pages qui existent dans les deux langues
   children 
 }) => {
   // Détecter automatiquement si la page est en anglais par l'URL si isEnglish n'est pas explicitement défini
@@ -60,8 +61,8 @@ const SEO = ({
       <meta name="twitter:image" content={ogImage} />
       
       {/* Balises hreflang pour le multilinguisme */}
-      <link rel="alternate" hreflang="fr" href="https://spero-navette.be/" />
-      <link rel="alternate" hreflang="en" href="https://spero-navette.be/en/charleroi-airport-shuttle" />
+      {alternates?.fr && <link rel="alternate" hrefLang="fr" href={alternates.fr} />}
+      {alternates?.en && <link rel="alternate" hrefLang="en" href={alternates.en} />}
       
       {/* Contenu supplémentaire si nécessaire (ex: JSON-LD) */}
       {children}

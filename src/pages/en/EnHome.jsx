@@ -15,8 +15,6 @@ const EnHome = () => (
       isEnglish
     >
       <html lang="en" />
-      <link rel="alternate" hrefLang="en" href="https://spero-navette.be/en" />
-      <link rel="alternate" hrefLang="fr" href="https://spero-navette.be/" />
       <script type="application/ld+json">{JSON.stringify(faqJsonLd())}</script>
     </SEO>
 

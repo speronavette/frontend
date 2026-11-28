@@ -28,7 +28,7 @@ function PayForm({ amount, bookingReference, onPaid, onBack }) {
       return;
     }
     if (paymentIntent && (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing')) {
-      onPaid();
+      onPaid(paymentIntent.status);
     } else {
       setError('Payment was not completed. Please try again.');
       setBusy(false);

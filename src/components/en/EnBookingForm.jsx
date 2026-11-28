@@ -9,7 +9,7 @@ const label = 'block mb-1 text-sm font-medium text-gray-800';
 const tomorrow = () => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
 export default function EnBookingForm({ defaultDestination = 'brussels' }) {
@@ -80,8 +80,8 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
   if (step === 'done') {
     return (
       <div className="p-6 rounded-lg border-2 border-green-200 bg-green-50 text-green-900" role="status">
-        <h3 className="text-xl font-bold mb-2">Thank you — your transfer is booked</h3>
-        <p>Your payment of €{payment.amount} has been received. Booking reference: <strong>{payment.bookingReference}</strong>.</p>
+        <h3 className="text-xl font-bold mb-2">{payment.status === 'processing' ? 'Thank you — your payment is being processed' : 'Thank you — your transfer is booked'}</h3>
+        <p>{payment.status === 'processing' ? `Your payment of €${payment.amount} is being confirmed by your bank.` : `Your payment of €${payment.amount} has been received.`} Booking reference: <strong>{payment.bookingReference}</strong>.</p>
         <p className="mt-2">A confirmation e-mail is on its way to <strong>{form.email}</strong>. If you don&apos;t see it within a few minutes, check your spam folder or call us on <a className="underline" href={EN_PHONE_HREF}>{EN_PHONE}</a>.</p>
       </div>
     );
@@ -101,7 +101,7 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
             clientSecret={payment.clientSecret}
             amount={payment.amount}
             bookingReference={payment.bookingReference}
-            onPaid={() => setStep('done')}
+            onPaid={(status) => { setPayment((p) => ({ ...p, status })); setStep('done'); }}
             onBack={() => setStep('details')}
           />
         </Suspense>
@@ -216,7 +216,7 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
       <button type="submit" disabled={busy} className="w-full sm:w-auto px-8 py-3 rounded-md bg-spero text-white font-semibold text-lg disabled:opacity-60">
         {busy ? 'Please wait…' : `Continue to payment — €${price}`}
       </button>
-      <p className="text-xs text-gray-600">Online bookings at least {EN_MIN_HOURS_AHEAD} hours in advance. Last-minute transfer? Call <a className="underline" href={EN_PHONE_HREF}>{EN_PHONE}</a>.</p>
+      <p className="text-xs text-gray-600">Online bookings at least {EN_MIN_HOURS_AHEAD} hours before pick-up. Last-minute transfer? Call <a className="underline" href={EN_PHONE_HREF}>{EN_PHONE}</a>.</p>
     </form>
   );
 }

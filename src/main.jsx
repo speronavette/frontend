@@ -76,23 +76,7 @@ const updateMetaTags = () => {
   }
   canonicalLink.setAttribute('href', window.location.origin + window.location.pathname);
 
-  let alternateFrLink = document.querySelector('link[hreflang="fr"]');
-  if (!alternateFrLink) {
-    alternateFrLink = document.createElement('link');
-    alternateFrLink.setAttribute('rel', 'alternate');
-    alternateFrLink.setAttribute('hreflang', 'fr');
-    document.head.appendChild(alternateFrLink);
-  }
-  alternateFrLink.setAttribute('href', 'https://spero-navette.be/');
-  
-  let alternateEnLink = document.querySelector('link[hreflang="en"]');
-  if (!alternateEnLink) {
-    alternateEnLink = document.createElement('link');
-    alternateEnLink.setAttribute('rel', 'alternate');
-    alternateEnLink.setAttribute('hreflang', 'en');
-    document.head.appendChild(alternateEnLink);
-  }
-  alternateEnLink.setAttribute('href', 'https://spero-navette.be/en/charleroi-airport-shuttle');
+  // Pas de balises hreflang : les pages FR (domicile → aéroport) et EN (aéroport → ville) ne sont pas des traductions l'une de l'autre.
 };
 
 updateMetaTags();

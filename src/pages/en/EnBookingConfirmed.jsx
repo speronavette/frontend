@@ -9,6 +9,7 @@ const EnBookingConfirmed = () => {
   const status = params.get('redirect_status');
   const ref = params.get('ref');
   const ok = status === 'succeeded' || status === 'processing';
+  const processing = status === 'processing';
 
   return (
     <>
@@ -19,8 +20,8 @@ const EnBookingConfirmed = () => {
       <div className="max-w-2xl mx-auto py-12">
         {ok ? (
           <div className="p-6 rounded-lg border-2 border-green-200 bg-green-50 text-green-900" role="status">
-            <h1 className="text-2xl font-bold mb-2">Thank you — your transfer is booked</h1>
-            <p>Your payment has been received{ref ? <> for booking <strong>{ref}</strong></> : null}. A confirmation e-mail is on its way.</p>
+            <h1 className="text-2xl font-bold mb-2">{processing ? 'Thank you — your payment is being processed' : 'Thank you — your transfer is booked'}</h1>
+            <p>{processing ? 'Your bank is confirming the payment' : 'Your payment has been received'}{ref ? <> for booking <strong>{ref}</strong></> : null}. {processing ? 'You will receive a confirmation e-mail as soon as it is confirmed.' : 'A confirmation e-mail is on its way.'}</p>
           </div>
         ) : (
           <div className="p-6 rounded-lg border-2 border-red-200 bg-red-50 text-red-900" role="alert">
