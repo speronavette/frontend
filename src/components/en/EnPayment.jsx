@@ -11,17 +11,28 @@ function PayForm({ amount, bookingReference, onPaid, onBack }) {
   const elements = useElements();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [ready, setReady] = useState(false);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) return;
+    if (!stripe || !elements || !ready) return;
     setBusy(true);
     setError('');
-    const { error: err, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: { return_url: `${window.location.origin}/en/booking-confirmed?ref=${encodeURIComponent(bookingReference)}` },
-      redirect: 'if_required'
-    });
+    let result;
+    try {
+      result = await stripe.confirmPayment({
+        elements,
+        confirmParams: { return_url: `${window.location.origin}/en/booking-confirmed?ref=${encodeURIComponent(bookingReference)}` },
+        redirect: 'if_required'
+      });
+    } catch (e) {
+      console.error('Stripe confirmPayment', e);
+      setError('Payment could not be processed. Please try again or call +32 490 19 79 14.');
+      setBusy(false);
+      return;
+    }
+    const { error: err, paymentIntent } = result;
     if (err) {
       setError(err.message || 'Payment failed. Please try another card.');
       setBusy(false);
@@ -37,13 +48,22 @@ function PayForm({ amount, bookingReference, onPaid, onBack }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement options={{ layout: 'tabs' }} />
+      <PaymentElement
+        options={{ layout: 'tabs' }}
+        onReady={() => setReady(true)}
+        onLoadError={(e) => { console.error('Stripe PaymentElement', e?.error); setLoadFailed(true); }}
+      />
+      {loadFailed && (
+        <p className="text-sm text-red-700" role="alert">
+          The secure payment form could not be loaded. Please try again later or call +32 490 19 79 14 to book.
+        </p>
+      )}
       {error && <p className="text-sm text-red-700" role="alert">{error}</p>}
       <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-between">
         <button type="button" onClick={onBack} disabled={busy} className="px-5 py-3 rounded-md border-2 border-spero text-spero font-semibold">
           Back
         </button>
-        <button type="submit" disabled={!stripe || busy} className="px-6 py-3 rounded-md bg-spero text-white font-semibold disabled:opacity-60">
+        <button type="submit" disabled={!stripe || !ready || busy || loadFailed} className="px-6 py-3 rounded-md bg-spero text-white font-semibold disabled:opacity-60">
           {busy ? 'Processing…' : `Pay €${amount}`}
         </button>
       </div>
