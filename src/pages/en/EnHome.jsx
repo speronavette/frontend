@@ -10,7 +10,7 @@ const EnHome = () => (
   <>
     <SEO
       title="Charleroi Airport Private Transfers"
-      description="Private transfer from Charleroi Airport (CRL) to Brussels, Bruges, Ghent, Antwerp and Namur. Fixed price per vehicle, driver waiting with your name, no night surcharge. Book and pay online."
+      description="Private transfer from Charleroi Airport (CRL) to Brussels, Bruges, Ghent, Antwerp and Namur. Fixed price per vehicle, driver waiting for you, no night surcharge, 5% off return trips."
       keywords="Charleroi airport transfer, Charleroi airport to Brussels, Charleroi airport to Bruges, Charleroi airport taxi, private transfer Belgium"
       canonicalUrl="https://spero-navette.be/en"
       isEnglish
@@ -33,6 +33,18 @@ const EnHome = () => (
       </header>
 
       <WhyUs />
+
+      <section className="max-w-3xl mx-auto text-gray-700 space-y-3">
+        <h2 className="text-2xl font-semibold text-gray-900">A private transfer from Charleroi Airport (CRL)</h2>
+        <p>
+          Brussels South Charleroi Airport is about 70 km from Brussels and between 40 and 150 km from the main cities of Belgium.
+          Public transport usually means a bus to Charleroi-Central station and one or two trains, with your luggage.
+        </p>
+        <p>
+          Spero Navette is a local airport shuttle company based near Charleroi. Your driver meets you at the airport and takes you
+          directly to your hotel, apartment or office — and back to the airport for your flight home.
+        </p>
+      </section>
 
       <section>
         <h2 className="text-2xl font-semibold mb-4">Prices</h2>
