@@ -5,7 +5,7 @@ const TermsAndConditions = () => {
   return (
     <>
       <SEO
-  title="Conditions Générales de Vente | Spero Navette Transport Aéroport"
+  title="Conditions générales de vente"
   description="Conditions générales de vente et d'utilisation du service de navette aéroport Spero Navette. Politique d'annulation, tarification, responsabilités."
   keywords="conditions générales spero navette, cgv transport aéroport, politique annulation, mentions légales navette, conditions utilisation"
   canonicalUrl="https://spero-navette.be/conditions-generales"

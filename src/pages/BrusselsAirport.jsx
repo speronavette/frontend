@@ -243,7 +243,7 @@ const BrusselsAirport = () => {
   return (
     <>
       <SEO
-        title={`Navette Aéroport Bruxelles-Zaventem depuis Charleroi | Dès ${fromPrice(106)}€`}
+        title={`Navette aéroport Bruxelles-Zaventem dès ${fromPrice(106)} €`}
         description={`Navette vers l'aéroport de Bruxelles-Zaventem depuis le Hainaut. Trajet 50-70 min, service 24/7, dès ${fromPrice(106)}€. Évitez le stress du parking et des transports.`}
         keywords="navette bruxelles zaventem, transport zaventem charleroi, navette aéroport bruxelles, taxi zaventem hainaut, transfert bru airport"
         canonicalUrl="https://spero-navette.be/navette-aeroport-bruxelles-zaventem"

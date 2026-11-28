@@ -143,7 +143,7 @@ const Blog = () => {
   return (
     <>
       <SEO
-  title="Blog Conseils Voyages | Astuces Navette Aéroport | Spero Navette"
+  title="Blog : conseils voyage et aéroport"
   description="Conseils et astuces pour vos voyages en avion depuis la Belgique. Guide pratique navette aéroport, horaires recommandés, erreurs à éviter."
   keywords="blog navette aéroport, conseils voyage avion, astuces transport aéroport, guide voyageur belgique, conseils vol aéroport"
   canonicalUrl="https://spero-navette.be/blog"

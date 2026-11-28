@@ -2428,7 +2428,7 @@ const BlogPost = () => {
   return (
     <>
       <SEO 
-        title={`${post.title} | Blog Spero Navette`}
+        title={post.title}
         description={post.excerpt}
         keywords={post.tags.join(', ')}
       />

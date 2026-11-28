@@ -16,7 +16,16 @@ const routes = [
   '/navette-aeroport-paris-cdg',
   '/blog',
   '/avis',
-  '/faq'
+  '/faq',
+  '/conditions-generales',
+  '/blog/voyager-famille-avantages-navette',
+  '/blog/pourquoi-arriver-3-4-heures-avant-vol-ete',
+  '/blog/erreurs-frequentes-voyage-aeroport-spero-navette',
+  '/blog/entreprises-navettes-professionnelles-tendance',
+  '/blog/erreurs-voyageurs-comment-eviter',
+  '/blog/heures-pointe-rentre-eviter-bouchons-trajet-aeroport',
+  '/blog/reserver-navette-wallonie-avantages',
+  '/blog/check-list-avant-depart-aeroport'
   // Pages anglaises à rajouter quand EN_LIVE = true (src/data/enTransfers.js) :
   // '/en', '/en/charleroi-airport-to-brussels', '/en/charleroi-airport-to-bruges',
   // '/en/charleroi-airport-to-ghent', '/en/charleroi-airport-to-antwerp', '/en/charleroi-airport-to-namur'
@@ -82,7 +91,13 @@ async function prerender() {
 
       // Attendre que React finisse de charger
       await page.waitForSelector('#root', { timeout: 10000 });
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Attendre que la page demandée soit vraiment affichée (titre H1 + URL canonique de cette page)
+      await page.waitForFunction((r) => {
+        const canon = document.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+        const path = canon.replace(/^https?:\/\/[^/]+/, '') || '/';
+        return document.querySelector('h1') && (path === r || path === r + '/');
+      }, { timeout: 15000 }, route).catch(() => console.warn(`⚠️ ${route} : page incomplète, vérifier le rendu`));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Récupérer le HTML
       let html = await page.content();

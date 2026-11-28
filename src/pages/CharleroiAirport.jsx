@@ -425,7 +425,7 @@ const CharleroiAirport = () => {
   return (
     <>
 <SEO
-  title="Navette Aéroport Charleroi depuis Wallonie | Namur, Liège, Mons - Spero"
+  title="Navette aéroport Charleroi depuis la Wallonie"
   description="Navette aéroport Charleroi depuis toute la Wallonie : Namur (30min), Liège (50min), Mons (40min). Service 24h/7, prix fixes, transferts directs. Réservez maintenant !"
   keywords="navette aéroport charleroi wallonie, transfert charleroi depuis namur, navette charleroi liège, taxi aéroport charleroi mons, transport charleroi brussels south, navette charleroi tournai"
   canonicalUrl="https://spero-navette.be/navette-aeroport-charleroi"

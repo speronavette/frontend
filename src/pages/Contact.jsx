@@ -34,7 +34,7 @@ function Contact() {
   return (
     <>
       <SEO
-  title="Contact & Devis Gratuit | Navette Aéroport Hainaut | 0490 19 79 14"
+  title="Contact et devis navette aéroport"
   description="Contactez Spero Navette pour votre transport aéroport. Devis gratuit, réponse rapide. ☎ 0490 19 79 14 ou info@spero-navette.be. Service 24/7 disponible."
   keywords="contact navette aéroport, devis transport aéroport, téléphone navette charleroi, réservation navette bruxelles, contact spero navette, demande de prix"
   canonicalUrl="https://spero-navette.be/contact"

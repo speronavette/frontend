@@ -61,7 +61,7 @@ function Services() {
   return (
     <>
       <SEO
-  title="Services Navette Aéroport | Transport Privé & Partagé | Spero Navette"
+  title="Navette aéroport partagée ou privée"
   description="Découvrez nos services de navette privée ou partagée vers tous les aéroports européens. Départ depuis le Hainaut, ponctualité garantie. ☎ 0490 19 79 14"
   keywords="navette privée aéroport, navette partagée, service transport aéroport, navette zaventem, navette charleroi brussels south, transport longue distance"
   canonicalUrl="https://spero-navette.be/services"

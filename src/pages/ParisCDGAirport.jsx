@@ -91,7 +91,7 @@ const ParisCDGAirport = () => {
   return (
     <>
       <SEO
-  title="Navette Belgique → Paris CDG | Alternative Train & Avion | 3h Direct"
+  title="Navette Belgique – Paris CDG en direct"
   description="Navette Belgique → Paris Charles de Gaulle. Trajet direct 3h, alternative économique au train. Porte-à-porte sans correspondance. Devis gratuit en ligne."
   keywords="navette paris cdg belgique, transport belgique paris, navette charleroi paris cdg, alternative train paris, transfert paris charles de gaulle, navette longue distance"
   canonicalUrl="https://spero-navette.be/navette-aeroport-paris-cdg"

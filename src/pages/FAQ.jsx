@@ -186,7 +186,7 @@ const FAQ = () => {
   return (
     <>
       <SEO
-  title="FAQ Navette Aéroport | Questions & Réponses Transport | Spero Navette"
+  title="FAQ navette aéroport : prix, bagages, retards"
   description="Toutes les réponses à vos questions sur notre navette aéroport : tarifs, horaires, réservation, annulation, bagages. Guide complet pour voyager sereinement."
   keywords="faq navette aéroport, questions transport aéroport, comment réserver navette, tarifs navette aéroport, annulation navette, bagages navette"
   canonicalUrl="https://spero-navette.be/faq"

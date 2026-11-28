@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Star, User, Calendar, ExternalLink, Filter, ChevronDown } from 'lucide-react';
 import { GOOGLE_REVIEWS } from '../data/googleReviews';
+import SEO from '../components/SEO';
 import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT, GOOGLE_MAPS_URL } from '../data/business';
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CQTXwFtumGyuEBM/review";
@@ -102,7 +103,12 @@ const Avis = () => {
 
   return (
     <>
-      <title>Avis Clients Spero Navette | Témoignages Navette Aéroport</title>
+      <SEO
+        title={`Avis clients : ${GOOGLE_RATING}/5 sur ${GOOGLE_REVIEW_COUNT} avis Google`}
+        description={`Découvrez les ${GOOGLE_REVIEW_COUNT} avis Google de nos clients (${GOOGLE_RATING}/5) : ponctualité, chauffeurs aimables, navette aéroport depuis votre domicile vers Charleroi, Bruxelles et Paris.`}
+        keywords="avis Spero Navette, avis navette aéroport, navette aéroport Charleroi avis, témoignages navette"
+        canonicalUrl="https://spero-navette.be/avis"
+      />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
