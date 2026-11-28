@@ -21,13 +21,15 @@ const TermsAndConditions = () => {
               <p>1.1. Toute réservation vaut acceptation de nos conditions générales.</p>
               <p>1.2. Modalités de paiement :</p>
               <ul className="list-disc pl-8 my-2">
-                <li>En espèces au chauffeur ou via Bancontact lors de la prise en charge</li>
-                <li>Par virement bancaire avant la date du transfert</li>
-                <li>Sur facture (uniquement pour les entreprises et indépendants)</li>
+                <li>Navette partagée : en espèces ou par carte bancaire au chauffeur lors de la prise en charge.</li>
+                <li>Navette privée : par virement bancaire au plus tard 5 jours ouvrables avant la prise en charge ou, si la réservation est effectuée dans ce délai, dès réception de la confirmation. La réservation n'est garantie qu'après réception du paiement.</li>
+                <li>Sur facture (uniquement pour les entreprises et indépendants), quel que soit le type de navette.</li>
               </ul>
               <p>1.3. Les factures doivent être réglées dans les 14 jours suivant leur émission. Tout retard de paiement entraînera des frais administratifs de 10% du montant total avec un minimum de 20€, ainsi que les intérêts légaux applicables.</p>
               <p>1.4. Pour toute demande de réservation moins de 24 heures avant votre prise en charge, veuillez appeler notre bureau au +32 490 197 914.</p>
               <p>1.5. Un supplément de 50 % s'applique du 24/12 à partir de 14h00 au 25/12 inclus, et du 31/12 à partir de 14h00 au 01/01 inclus.</p>
+              <p>1.6. Option « Assistance à l'aéroport » : moyennant un supplément de 10 €, appliqué au seul trajet vers l'aéroport, le chauffeur accompagne le client jusqu'au check-in ou au comptoir d'assistance, selon le choix fait lors de la réservation.</p>
+              <p>1.7. Promotions : les conditions de chaque promotion (période de validité, date de réservation, services concernés) sont indiquées sur le site. Une promotion ne s'applique pas aux réservations effectuées avant sa date de début et n'est pas cumulable avec une autre réduction.</p>
             </div>
           </section>
           
@@ -84,7 +86,7 @@ const TermsAndConditions = () => {
             <div className="space-y-2 text-gray-700">
               <p>6.1. Toutes les plaintes ou réclamations doivent être envoyées par courrier recommandé au plus tard 7 jours après la date de la facture.</p>
               <p>6.2. Le droit belge est applicable à toutes ces conditions générales.</p>
-              <p>6.3. Tout litige relatif à l'exécution ou l'interprétation de ces conditions générales sera de la compétence exclusive des tribunaux de Bruxelles.</p>
+              <p>6.3. Tout litige relatif à l'exécution ou l'interprétation de ces conditions générales sera de la compétence exclusive des tribunaux de Charleroi.</p>
             </div>
           </section>
           
@@ -105,7 +107,7 @@ const TermsAndConditions = () => {
           </section>
           
           <div className="mt-10 text-center text-gray-500">
-            <p>Dernière mise à jour : Mars 2025</p>
+            <p>Dernière mise à jour : Novembre 2026</p>
             <p>Spero Navette SRL - BE1007.320.551</p>
           </div>
         </div>
