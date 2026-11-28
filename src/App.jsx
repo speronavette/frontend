@@ -19,6 +19,9 @@ const Confirmation = lazy(() => import('./pages/Confirmation'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const Avis = lazy(() => import('./pages/Avis'));
+const EnHome = lazy(() => import('./pages/en/EnHome'));
+const EnDestination = lazy(() => import('./pages/en/EnDestination'));
+const EnBookingConfirmed = lazy(() => import('./pages/en/EnBookingConfirmed'));
 
 
 // Pages spécialisées avec preload
@@ -90,20 +93,50 @@ const GoogleAnalytics = memo(() => {
 });
 
 // Navigation memoized pour éviter les re-renders
-const Navigation = memo(() => (
-  <nav className="bg-spero text-white p-4" aria-label="Navigation principale">
-    <div className="max-w-6xl mx-auto flex justify-between items-center px-4">
-      <div className="flex space-x-4">
-        <Link to="/" className="hover:text-opacity-80" aria-label="Accueil">Accueil</Link>
-        <Link to="/services" className="hover:text-opacity-80">Services</Link>
-        <Link to="/blog" className="hover:text-opacity-80">Blog</Link>
-        <Link to="/avis" className="hover:text-opacity-80">Avis clients</Link>
-        <Link to="/contact" className="hover:text-opacity-80">Contactez-nous</Link>
-        <Link to="/faq" className="hover:text-opacity-80">FAQ</Link>
+const Navigation = memo(() => {
+  const { pathname } = useLocation();
+  const isEn = pathname === '/en' || pathname.startsWith('/en/');
+  if (isEn) {
+    return (
+      <nav className="bg-spero text-white p-4" aria-label="Main navigation">
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-y-2 justify-between items-center px-4">
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link to="/en" className="hover:text-opacity-80">Airport transfers</Link>
+            <Link to="/en/charleroi-airport-to-brussels" className="hover:text-opacity-80">Brussels</Link>
+            <Link to="/en/charleroi-airport-to-bruges" className="hover:text-opacity-80">Bruges</Link>
+            <Link to="/en/charleroi-airport-to-ghent" className="hover:text-opacity-80">Ghent</Link>
+            <Link to="/en/charleroi-airport-to-antwerp" className="hover:text-opacity-80">Antwerp</Link>
+            <Link to="/en/charleroi-airport-to-namur" className="hover:text-opacity-80">Namur</Link>
+          </div>
+          <div className="text-sm font-semibold" aria-label="Language">
+            <Link to="/" lang="fr" className="opacity-80 hover:opacity-100">FR</Link>
+            <span className="mx-2" aria-hidden="true">|</span>
+            <span aria-current="true">EN</span>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+  return (
+    <nav className="bg-spero text-white p-4" aria-label="Navigation principale">
+      <div className="max-w-6xl mx-auto flex flex-wrap gap-y-2 justify-between items-center px-4">
+        <div className="flex flex-wrap gap-x-4 gap-y-1">
+          <Link to="/" className="hover:text-opacity-80" aria-label="Accueil">Accueil</Link>
+          <Link to="/services" className="hover:text-opacity-80">Services</Link>
+          <Link to="/blog" className="hover:text-opacity-80">Blog</Link>
+          <Link to="/avis" className="hover:text-opacity-80">Avis clients</Link>
+          <Link to="/contact" className="hover:text-opacity-80">Contactez-nous</Link>
+          <Link to="/faq" className="hover:text-opacity-80">FAQ</Link>
+        </div>
+        <div className="text-sm font-semibold" aria-label="Langue">
+          <span aria-current="true">FR</span>
+          <span className="mx-2" aria-hidden="true">|</span>
+          <Link to="/en" lang="en" className="opacity-80 hover:opacity-100">EN</Link>
+        </div>
       </div>
-    </div>
-  </nav>
-));
+    </nav>
+  );
+});
 
 // Footer memoized
 const Footer = memo(() => (
@@ -230,6 +263,11 @@ function App() {
               {/* Routes blog (faible priorité) */}
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:postId" element={<BlogPost />} />
+
+              {/* Pages anglaises : transferts depuis l'aéroport de Charleroi */}
+              <Route path="/en" element={<EnHome />} />
+              <Route path="/en/:route" element={<EnDestination />} />
+              <Route path="/en/booking-confirmed" element={<EnBookingConfirmed />} />
             </Routes>
           </Suspense>
         </main>
