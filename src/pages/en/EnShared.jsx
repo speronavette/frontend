@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { EN_DESTINATIONS, EN_PHONE, EN_PHONE_HREF } from '../../data/enTransfers';
+import { EN_DESTINATIONS, EN_PHONE, EN_PHONE_HREF, EN_EMAIL, EN_WHATSAPP_HREF } from '../../data/enTransfers';
 import { GOOGLE_RATING, GOOGLE_REVIEW_COUNT } from '../../data/business';
 
 export const WhyUs = () => (
@@ -44,7 +44,7 @@ export const PriceTable = ({ only }) => (
         ))}
       </tbody>
     </table>
-    <p className="text-xs text-gray-600 mt-2">Same price in both directions. Another destination in Belgium? Call <a className="underline" href={EN_PHONE_HREF}>{EN_PHONE}</a> for a quote.</p>
+    <p className="text-xs text-gray-600 mt-2">Same price in both directions. Book your return trip together and save 5%. Another destination? Ask for a quote by <a className="underline" href={`mailto:${EN_EMAIL}`}>e-mail</a> or <a className="underline" href={EN_WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
   </div>
 );
 
@@ -56,6 +56,10 @@ export const Cancellation = () => (
       <li>Between 48 and 24 hours before pick-up: 50% refund</li>
       <li>Less than 24 hours before pick-up or no-show: no refund</li>
     </ul>
+    <p className="mt-3 text-gray-700">
+      <strong>Return trips</strong> are booked as one package at a discounted price. If either transfer is cancelled less than
+      24 hours before its pick-up time, or is a no-show, the whole return trip is non-refundable.
+    </p>
   </section>
 );
 
@@ -64,6 +68,8 @@ export const enFaq = [
   ['What happens if my flight is delayed?', 'Your driver follows your flight and adapts to the actual landing time, with no maximum waiting time and no extra charge. If your flight is delayed, there may be a short wait for your driver once you exit.'],
   ['Where will I meet my driver?', 'In the arrivals hall of Charleroi Airport. Your driver holds a sign with your name and contacts you by phone or text.'],
   ['Is there a night surcharge?', 'No. The price is the same day and night.'],
+  ['Is there a discount for a return trip?', 'Yes. Book your arrival and departure transfers together and save 5% on the total.'],
+  ['Can you take me to another destination?', `Yes, anywhere in Belgium and to neighbouring countries on request. Send us your details by e-mail (${EN_EMAIL}) or WhatsApp (${EN_PHONE}) for a fixed-price quote.`],
   ['How do I pay?', 'Online by card when you book (Visa, Mastercard and other cards accepted by our payment provider Stripe). You receive a confirmation e-mail straight away.'],
   ['Do you provide child seats?', 'Yes, free of charge. Just select them when you book.']
 ];

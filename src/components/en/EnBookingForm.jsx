@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useMemo, useState } from 'react';
-import { EN_DESTINATIONS, EN_MIN_HOURS_AHEAD, EN_PHONE, EN_PHONE_HREF, getEnPrice } from '../../data/enTransfers';
+import { EN_DESTINATIONS, EN_MIN_HOURS_AHEAD, EN_PHONE, EN_PHONE_HREF, EN_EMAIL, EN_WHATSAPP_HREF, getEnTotal } from '../../data/enTransfers';
 
 const EnPayment = lazy(() => import('./EnPayment'));
 
@@ -14,7 +14,11 @@ const tomorrow = () => {
 
 export default function EnBookingForm({ defaultDestination = 'brussels' }) {
   const [form, setForm] = useState({
+    tripType: 'oneWay',
     direction: 'fromAirport',
+    returnDate: '',
+    returnTime: '',
+    returnFlightNumber: '',
     destination: defaultDestination,
     passengers: 2,
     date: '',
@@ -31,9 +35,12 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
   const [error, setError] = useState('');
   const [payment, setPayment] = useState(null);
 
-  const price = useMemo(() => getEnPrice(form.destination, form.passengers), [form.destination, form.passengers]);
-  const dest = EN_DESTINATIONS.find((d) => d.key === form.destination);
-  const fromAirport = form.direction === 'fromAirport';
+  const roundTrip = form.tripType === 'roundTrip';
+  const isOther = form.destination === 'other';
+  const price = useMemo(() => getEnTotal(form.destination, form.passengers, roundTrip), [form.destination, form.passengers, roundTrip]);
+  const fullPrice = useMemo(() => (roundTrip ? getEnTotal(form.destination, form.passengers, false) * 2 : null), [form.destination, form.passengers, roundTrip]);
+  const dest = EN_DESTINATIONS.find((d) => d.key === form.destination) || { name: 'your destination' };
+  const fromAirport = roundTrip || form.direction === 'fromAirport';
 
   const set = (e) => {
     const { name, value, type, checked } = e.target;
@@ -50,7 +57,11 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          tripType: form.tripType,
           direction: form.direction,
+          returnDate: form.returnDate,
+          returnTime: form.returnTime,
+          returnFlightNumber: form.returnFlightNumber,
           destination: form.destination,
           passengers: Number(form.passengers),
           date: form.date,
@@ -92,9 +103,9 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
       <div className="space-y-4">
         <div className="p-4 rounded-lg bg-gray-50 border border-gray-200 text-sm">
           <p className="font-semibold text-base mb-1">
-            {fromAirport ? `Charleroi Airport → ${dest.name}` : `${dest.name} → Charleroi Airport`} · €{payment.amount}
+            {roundTrip ? `Charleroi Airport ⇄ ${dest.name} (return trip)` : fromAirport ? `Charleroi Airport → ${dest.name}` : `${dest.name} → Charleroi Airport`} · €{payment.amount}
           </p>
-          <p>{form.date} at {form.time} · {form.passengers} passenger(s) · ref. {payment.bookingReference}</p>
+          <p>{roundTrip ? `Arrival ${form.date} at ${form.time} · Departure ${form.returnDate} at ${form.returnTime}` : `${form.date} at ${form.time}`} · {form.passengers} passenger(s) · ref. {payment.bookingReference}</p>
         </div>
         <Suspense fallback={<p>Loading secure payment…</p>}>
           <EnPayment
@@ -113,22 +124,37 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <fieldset>
-        <legend className={label}>Direction</legend>
+        <legend className={label}>Trip</legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[['fromAirport', 'From Charleroi Airport'], ['toAirport', 'To Charleroi Airport']].map(([v, l]) => (
-            <label key={v} className={`flex items-center gap-2 p-3 border-2 rounded-md cursor-pointer ${form.direction === v ? 'border-spero bg-spero/5' : 'border-gray-200'}`}>
-              <input type="radio" name="direction" value={v} checked={form.direction === v} onChange={set} />
+          {[['oneWay', 'One way'], ['roundTrip', 'Return trip — save 5%']].map(([v, l]) => (
+            <label key={v} className={`flex items-center gap-2 p-3 border-2 rounded-md cursor-pointer ${form.tripType === v ? 'border-spero bg-spero/5' : 'border-gray-200'}`}>
+              <input type="radio" name="tripType" value={v} checked={form.tripType === v} onChange={set} />
               {l}
             </label>
           ))}
         </div>
       </fieldset>
 
+      {!roundTrip && (
+        <fieldset>
+          <legend className={label}>Direction</legend>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[['fromAirport', 'From Charleroi Airport'], ['toAirport', 'To Charleroi Airport']].map(([v, l]) => (
+              <label key={v} className={`flex items-center gap-2 p-3 border-2 rounded-md cursor-pointer ${form.direction === v ? 'border-spero bg-spero/5' : 'border-gray-200'}`}>
+                <input type="radio" name="direction" value={v} checked={form.direction === v} onChange={set} />
+                {l}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="destination" className={label}>{fromAirport ? 'Destination' : 'Pick-up city'}</label>
           <select id="destination" name="destination" value={form.destination} onChange={set} className={field}>
             {EN_DESTINATIONS.map((d) => <option key={d.key} value={d.key}>{d.name}</option>)}
+            <option value="other">Other destination</option>
           </select>
         </div>
         <div>
@@ -137,6 +163,24 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
             {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n} value={n}>{n}</option>)}
           </select>
         </div>
+      </div>
+
+      {isOther ? (
+        <div className="p-5 rounded-lg border-2 border-spero/30 bg-spero/5">
+          <h3 className="font-semibold text-lg mb-2">Another destination in Belgium or nearby?</h3>
+          <p className="text-gray-700 mb-4">Tell us your destination, date, flight and number of passengers and we will send you a fixed-price quote.</p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a href={`mailto:${EN_EMAIL}?subject=${encodeURIComponent('Transfer quote from Charleroi Airport')}`} className="inline-flex justify-center px-5 py-3 rounded-md bg-spero text-white font-semibold">
+              E-mail {EN_EMAIL}
+            </a>
+            <a href={EN_WHATSAPP_HREF} target="_blank" rel="noopener noreferrer" className="inline-flex justify-center px-5 py-3 rounded-md border-2 border-spero text-spero font-semibold">
+              WhatsApp {EN_PHONE}
+            </a>
+          </div>
+        </div>
+      ) : (
+      <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="date" className={label}>{fromAirport ? 'Arrival date' : 'Flight date'}</label>
           <input id="date" type="date" name="date" min={tomorrow()} value={form.date} onChange={set} required className={field} />
@@ -151,8 +195,26 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
         </div>
       </div>
 
+      {roundTrip && (
+        <fieldset className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <legend className={`${label} sm:col-span-2`}>Departure transfer (back to Charleroi Airport)</legend>
+          <div>
+            <label htmlFor="returnDate" className={label}>Departure flight date</label>
+            <input id="returnDate" type="date" name="returnDate" min={form.date || tomorrow()} value={form.returnDate} onChange={set} required className={field} />
+          </div>
+          <div>
+            <label htmlFor="returnTime" className={label}>Departure flight time (local time)</label>
+            <input id="returnTime" type="time" name="returnTime" value={form.returnTime} onChange={set} required className={field} />
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="returnFlightNumber" className={label}>Departure flight number</label>
+            <input id="returnFlightNumber" name="returnFlightNumber" value={form.returnFlightNumber} onChange={set} required maxLength={10} placeholder="e.g. FR5678" className={field} />
+          </div>
+        </fieldset>
+      )}
+
       <fieldset>
-        <legend className={label}>{fromAirport ? `Drop-off address in ${dest.name} area` : `Pick-up address in ${dest.name} area`}</legend>
+        <legend className={label}>{roundTrip ? `Your address in ${dest.name} area (drop-off and pick-up)` : fromAirport ? `Drop-off address in ${dest.name} area` : `Pick-up address in ${dest.name} area`}</legend>
         <div className="grid grid-cols-6 gap-3">
           <input aria-label="Street" name="street" value={form.street} onChange={set} required placeholder="Street" className={`${field} col-span-4`} />
           <input aria-label="Number" name="number" value={form.number} onChange={set} required placeholder="No." className={`${field} col-span-2`} />
@@ -197,8 +259,11 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
 
       <div className="p-4 rounded-lg bg-spero/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <p className="text-sm text-gray-700">Private transfer · price per vehicle · {Number(form.passengers) <= 4 ? '1–4 passengers' : '5–8 passengers'}</p>
-          <p className="text-2xl font-bold text-gray-900">€{price}</p>
+          <p className="text-sm text-gray-700">{roundTrip ? 'Return trip (2 transfers) · 5% off' : 'Private transfer'} · price per vehicle · {Number(form.passengers) <= 4 ? '1–4 passengers' : '5–8 passengers'}</p>
+          <p className="text-2xl font-bold text-gray-900">
+            €{price}
+            {roundTrip && <span className="ml-2 text-base font-normal text-gray-500 line-through">€{fullPrice}</span>}
+          </p>
         </div>
         <p className="text-sm text-gray-700">No night surcharge · luggage included</p>
       </div>
@@ -208,6 +273,7 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
         <span>
           I accept the cancellation policy: full refund more than 48 hours before pick-up, 50% refund between 48 and 24 hours,
           no refund less than 24 hours before pick-up or in case of no-show.
+          {roundTrip && ' For a return trip, if either transfer is cancelled less than 24 hours before its pick-up or is a no-show, the whole return trip is non-refundable.'}
         </span>
       </label>
 
@@ -217,6 +283,8 @@ export default function EnBookingForm({ defaultDestination = 'brussels' }) {
         {busy ? 'Please wait…' : `Continue to payment — €${price}`}
       </button>
       <p className="text-xs text-gray-600">Online bookings at least {EN_MIN_HOURS_AHEAD} hours before pick-up. Last-minute transfer? Call <a className="underline" href={EN_PHONE_HREF}>{EN_PHONE}</a>.</p>
+      </>
+      )}
     </form>
   );
 }

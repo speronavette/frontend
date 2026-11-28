@@ -56,6 +56,7 @@ export const EN_DESTINATIONS = [
 ];
 
 export const EN_MIN_HOURS_AHEAD = 24;
+export const EN_ROUND_TRIP_DISCOUNT = 0.05;
 
 export const getEnPrice = (key, passengers) => {
   const d = EN_DESTINATIONS.find((x) => x.key === key);
@@ -64,5 +65,14 @@ export const getEnPrice = (key, passengers) => {
   return n <= 4 ? d.small : d.large;
 };
 
+// Aller-retour : 2 trajets -5 %, arrondi à l'euro inférieur (identique au serveur)
+export const getEnTotal = (key, passengers, roundTrip) => {
+  const one = getEnPrice(key, passengers);
+  if (one === null) return null;
+  return roundTrip ? Math.floor(Math.round(one * 2 * (1 - EN_ROUND_TRIP_DISCOUNT) * 100) / 100) : one;
+};
+
 export const EN_PHONE = '+32 490 19 79 14';
 export const EN_PHONE_HREF = 'tel:+32490197914';
+export const EN_EMAIL = 'info@spero-navette.be';
+export const EN_WHATSAPP_HREF = 'https://wa.me/32490197914';
