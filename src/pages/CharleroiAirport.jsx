@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { pricesDB, isPromoActive, applyPromo } from '../data/prices';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { ArrowRight, CheckCircle, Clock, MapPin, Shield, Users, Phone, Star, Plane, Car, Mail, Info, ChevronLeft, ChevronRight } from '../components/Icons';
@@ -775,19 +776,19 @@ const CharleroiAirport = () => {
               <div className="grid md:grid-cols-3 gap-4 text-center">
                 <div className="bg-white p-4 rounded-lg shadow">
                   <p className="font-semibold text-spero">Namur → Charleroi</p>
-                  <p className="text-sm text-gray-600">À partir de 35€/pers</p>
+                  <p className="text-sm text-gray-600">{isPromoActive() ? <>À partir de <strong>{applyPromo(pricesDB['5000-CRL'])} €</strong> <span className="line-through text-gray-400">{pricesDB['5000-CRL']} €</span></> : <>À partir de {pricesDB['5000-CRL']} €</>}</p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow">
                   <p className="font-semibold text-spero">Liège → Charleroi</p>
-                  <p className="text-sm text-gray-600">À partir de 55€/pers</p>
+                  <p className="text-sm text-gray-600">{isPromoActive() ? <>À partir de <strong>{applyPromo(pricesDB['4000-CRL'])} €</strong> <span className="line-through text-gray-400">{pricesDB['4000-CRL']} €</span></> : <>À partir de {pricesDB['4000-CRL']} €</>}</p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow">
                   <p className="font-semibold text-spero">Mons → Charleroi</p>
-                  <p className="text-sm text-gray-600">À partir de 40€/pers</p>
+                  <p className="text-sm text-gray-600">{isPromoActive() ? <>À partir de <strong>{applyPromo(pricesDB['7000-CRL'])} €</strong> <span className="line-through text-gray-400">{pricesDB['7000-CRL']} €</span></> : <>À partir de {pricesDB['7000-CRL']} €</>}</p>
                 </div>
               </div>
               <p className="text-xs text-center text-gray-600 mt-4">
-                *Tarifs indicatifs pour navette partagée. Prix définitif selon nombre de passagers et options.
+                *Prix par véhicule en navette partagée pour 1 à 2 personnes. Prix définitif selon le nombre de passagers et les options. Prix promo valable pour toute navette jusqu'au 31/03/2027 réservée à partir du 26/11/2026.
               </p>
             </div>
             

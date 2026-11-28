@@ -100,6 +100,12 @@ const FAQ = () => {
       answer: "Voici les points de rencontre dans les principaux aéroports :\n\n• Bruxelles-Zaventem : Dans le hall des arrivées, devant le café JAVA (sur votre droite en sortant)\n• Charleroi : Devant les ascenseurs au niveau du parking express\n• Paris CDG : Au dépose-minute des départs du terminal concerné\n• Paris Orly : Dans le hall des arrivées\n• Amsterdam Schiphol : Au dépose-minute des départs\n• Lille : Devant le Sheraton, sortie à gauche\n\nVotre chauffeur vous attendra avec un panneau à votre nom."
     },
     {
+      id: "assistance-aeroport",
+      icon: Users,
+      question: "Pouvez-vous m'accompagner dans l'aéroport jusqu'au check-in ou au comptoir d'assistance ?",
+      answer: "Oui, avec l'option payante « Assistance à l'aéroport » (+10 €), disponible pour le trajet de départ vers l'aéroport. Lors de la réservation, vous choisissez :\n• Accompagnement au check-in\n• Accompagnement au comptoir d'assistance\n\nVotre chauffeur vous accompagne alors jusqu'à l'endroit choisi au lieu de vous déposer devant le terminal."
+    },
+    {
       id: "vol-retard",
       icon: Plane,
       question: "Que se passe-t-il si mon vol a du retard ?",
@@ -118,13 +124,19 @@ const FAQ = () => {
       id: "modes-paiement",
       icon: CreditCard,
       question: "Quels sont les modes de paiement acceptés pour la navette ?",
-      answer: "Nous proposons plusieurs options de paiement :\n\n• En espèces : Payez directement au chauffeur le jour de votre navette\n• Bancontact : Paiement par carte au chauffeur (dans les véhicules équipés)\n• Virement bancaire : Pour payer à l'avance (minimum 5 jours avant)\n• Facturation : Pour les entreprises et indépendants avec numéro de TVA\n\nLe mode de paiement est à choisir lors de votre réservation."
+      answer: "Les modes de paiement dépendent du type de navette :\n\n• Navette partagée : en espèces ou par carte (Bancontact) au chauffeur le jour de votre navette\n• Navette privée : par virement bancaire, au plus tard 5 jours ouvrables avant la prise en charge (ou dès réception de la confirmation si votre navette a lieu plus tôt). Les coordonnées bancaires vous sont envoyées par e-mail avec la confirmation.\n• Facturation : pour les entreprises et indépendants avec numéro de TVA, quel que soit le type de navette\n\nLe mode de paiement est à choisir lors de votre réservation."
     },
     {
       id: "prix-calcul",
       icon: CreditCard,
       question: "Comment sont calculés les prix des navettes aéroport ?",
       answer: "Nos tarifs sont transparents et calculés selon :\n• La distance entre votre adresse et l'aéroport\n• Le type de service (navette privée ou partagée)\n• Le nombre de passagers\n• L'horaire (pas de supplément nuit/weekend)\n\nUtilisez notre calculateur en ligne pour obtenir un prix instantané. Les prix affichés sont définitifs, sans frais cachés. Tarifs spéciaux pour les groupes."
+    },
+    {
+      id: "promo-hiver",
+      icon: CreditCard,
+      question: "Quelles sont les conditions de la promotion en cours ?",
+      answer: "Le prix promo s'applique à toute navette dont la date est au plus tard le 31/03/2027, pour les réservations effectuées à partir du 26/11/2026. Il est calculé automatiquement lors de votre réservation en ligne, en navette partagée comme en navette privée.\n\nLes réservations faites avant le 26/11/2026 ne bénéficient pas de la promotion. L'option payante « Assistance à l'aéroport » n'est pas concernée par la remise."
     },
     {
       id: "annulation-frais",
