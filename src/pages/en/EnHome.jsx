@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO';
 import EnBookingForm from '../../components/en/EnBookingForm';
+import { EN_LIVE } from '../../data/enTransfers';
 import { EN_DESTINATIONS, EN_PHONE, EN_PHONE_HREF } from '../../data/enTransfers';
 import { WhyUs, PriceTable, Cancellation, Faq, faqJsonLd } from './EnShared';
 
@@ -15,6 +16,7 @@ const EnHome = () => (
       isEnglish
     >
       <html lang="en" />
+      {!EN_LIVE && <meta name="robots" content="noindex, nofollow" />}
       <script type="application/ld+json">{JSON.stringify(faqJsonLd())}</script>
     </SEO>
 

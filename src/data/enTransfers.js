@@ -2,6 +2,10 @@
 // Prix par véhicule, identiques dans les deux sens. Doivent rester identiques à
 // backend/src/config/transferPrices.js (c'est le serveur qui fixe le montant payé).
 
+// Mettre à true quand Stripe est validé et les vraies clés en place :
+// affiche le lien EN dans le menu et laisse Google indexer les pages anglaises.
+export const EN_LIVE = false;
+
 export const EN_DESTINATIONS = [
   {
     key: 'brussels',

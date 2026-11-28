@@ -16,13 +16,10 @@ const routes = [
   '/navette-aeroport-paris-cdg',
   '/blog',
   '/avis',
-  '/faq',
-  '/en',
-  '/en/charleroi-airport-to-brussels',
-  '/en/charleroi-airport-to-bruges',
-  '/en/charleroi-airport-to-ghent',
-  '/en/charleroi-airport-to-antwerp',
-  '/en/charleroi-airport-to-namur'
+  '/faq'
+  // Pages anglaises à rajouter quand EN_LIVE = true (src/data/enTransfers.js) :
+  // '/en', '/en/charleroi-airport-to-brussels', '/en/charleroi-airport-to-bruges',
+  // '/en/charleroi-airport-to-ghent', '/en/charleroi-airport-to-antwerp', '/en/charleroi-airport-to-namur'
 ];
 
 /**

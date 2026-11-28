@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, memo } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Toaster } from "./components/ui/toaster";
 import { HelmetProvider } from 'react-helmet-async';
+import { EN_LIVE } from './data/enTransfers';
 
 // Imports directs pour les pages critiques (pas de lazy loading)
 import Home from './pages/Home';
@@ -128,11 +129,13 @@ const Navigation = memo(() => {
           <Link to="/contact" className="hover:text-opacity-80">Contactez-nous</Link>
           <Link to="/faq" className="hover:text-opacity-80">FAQ</Link>
         </div>
-        <div className="text-sm font-semibold" aria-label="Langue">
-          <span aria-current="true">FR</span>
-          <span className="mx-2" aria-hidden="true">|</span>
-          <Link to="/en" lang="en" className="opacity-80 hover:opacity-100">EN</Link>
-        </div>
+        {EN_LIVE && (
+          <div className="text-sm font-semibold" aria-label="Langue">
+            <span aria-current="true">FR</span>
+            <span className="mx-2" aria-hidden="true">|</span>
+            <Link to="/en" lang="en" className="opacity-80 hover:opacity-100">EN</Link>
+          </div>
+        )}
       </div>
     </nav>
   );

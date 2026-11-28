@@ -8,7 +8,7 @@ export const WhyUs = () => (
     {[
       ['Fixed price per vehicle', 'One price for 1–4 passengers, another for 5–8. Not per person, no surge pricing, no night surcharge.'],
       ['We wait for you', 'Your driver follows your flight and adapts to the actual landing time. If your flight is delayed, there may be a short wait once you exit.'],
-      ['Easy meeting point', 'Your driver waits for you at Bingen, opposite the lifts, just after the turnstiles, with a sign showing your name, and helps with your luggage.'],
+      ['Easy meeting point', 'Your driver waits for you in front of the lifts, outside after the turnstiles, with a sign showing your name, and helps with your luggage.'],
       [`${GOOGLE_RATING.replace(',', '.')}/5 on Google`, `Rated by ${GOOGLE_REVIEW_COUNT} customers for punctuality and friendly drivers.`]
     ].map(([t, d]) => (
       <div key={t} className="bg-white rounded-lg border border-gray-200 p-5">
@@ -66,7 +66,7 @@ export const Cancellation = () => (
 export const enFaq = [
   ['Is the price per person or per vehicle?', 'Per vehicle. One price for 1 to 4 passengers, another for 5 to 8 passengers, luggage included.'],
   ['What happens if my flight is delayed?', 'Your driver follows your flight and adapts to the actual landing time, with no maximum waiting time and no extra charge. If your flight is delayed, there may be a short wait for your driver once you exit.'],
-  ['Where will I meet my driver?', 'At Charleroi Airport, at Bingen, opposite the lifts, just after the turnstiles. Your driver holds a sign with your name and contacts you by phone or text.'],
+  ['Where will I meet my driver?', 'At Charleroi Airport, in front of the lifts, outside after the turnstiles. Your driver holds a sign with your name and contacts you by phone or text.'],
   ['Is there a night surcharge?', 'No. The price is the same day and night.'],
   ['Is there a discount for a return trip?', 'Yes. Book your arrival and departure transfers together and save 5% on the total.'],
   ['Can you take me to another destination?', `Yes, anywhere in Belgium and to neighbouring countries on request. Send us your details by e-mail (${EN_EMAIL}) or WhatsApp (${EN_PHONE}) for a fixed-price quote.`],
